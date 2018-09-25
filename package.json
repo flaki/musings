@@ -1,0 +1,52 @@
+{
+  "name": "musings",
+  "version": "1.0.0",
+  "description": "Flaki's musings. You may also call it a blog.",
+  "main": "build.js",
+  "dependencies": {
+    "esm": "^3.0.0",
+    "fs-extra": "^7.0.0",
+    "full-icu": "1.2.1",
+    "klaw-sync": "^6.0.0",
+    "marked": "^0.5.0",
+    "serve": "latest"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "serve",
+    "deploy": "npm run build && now --public && now alias",
+    "build": "NODE_ICU_DATA=./node_modules/full-icu/icudt62l.dat node build.js",
+    "build-debug": "DEBUG=1 NODE_ICU_DATA=./node_modules/full-icu/icudt62l.dat node build.js"
+  },
+  "now": {
+    "alias": "musings.flak.is",
+    "type": "static",
+    "files": [ "_site" ],
+    "static": {
+      "public": "_site",
+      "cleanUrls": true,
+      "rewrites": [
+        {
+          "source": "/",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/flaki/musings.git"
+  },
+  "keywords": [
+    "flaki",
+    "musings",
+    "blog"
+  ],
+  "author": "Flaki <hello@flaki.hu>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/flaki/musings/issues"
+  },
+  "homepage": "https://github.com/flaki/musings#readme"
+}

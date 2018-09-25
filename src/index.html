@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>${global.sitename}</title>
+	<meta name="description" content="Flaki's musings about the world. You could call it a blog." />
+	<meta name="keywords" content="blog, thoughts, musings" />
+
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:site" content="@slsoftworks" />
+
+	<meta name="twitter:title" content="${global.sitename}" />
+	<meta name="twitter:description" content="Flaki's musings about the world. You could call it a blog." />
+	<meta name="twitter:image:src" content="${global.siteroot}img/social/musings.jpg" />
+
+	<meta property="og:site_name" content="${global.sitename}" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="${global.siteroot}" />
+
+	<meta property="og:title" content="${global.sitename}" />
+	<meta property="og:description" content="Flaki's musings about the world. You could call it a blog." />
+	<meta property="og:image" content="${global.siteroot}img/social/musings.jpg" />
+
+	<link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Raleway:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+	<link rel="stylesheet" href="/assets/style.css">
+</head>
+
+<body lang="hu">
+	<header>
+    <h1>${global.sitename}</h1>
+
+    ${page.tagline}
+    ${page.switchlang}
+	</header>
+
+  <main>
+    ${page.contents}
+  </main>
+
+</body>
+
+</html>
