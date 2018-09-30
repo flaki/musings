@@ -4,6 +4,7 @@
 
     language: hu
     description: Tömegek közlekednek -- ha az elektromos és önvezető autók nem mentik meg a bolygót a pusztulástól, akkor ki fogja?
+    published: 2018-09-23
 
 
 # Elektromos autók és egy szép új világ
@@ -31,13 +32,21 @@ Persze találkozom bőven ellenpéldával is, az USA notórius autó-pártisága
 
     language: en
 
-
 [...]
 
 
 
 ---
+    language: hu
+    updated: 2018-09-30
 
+> ### Kiegészítés -- @2018-09-30
+>
+> Nem sokkal a poszt megírása után jött szembe [ez a bejegyzés](https://europapont.blog.hu/2018/09/21/automentes_belvarosok_a_gyakorlatban) autómentes (bel)városokról. Koppenhága persze egy ilyen írásból sem maradhat ki, de egyebek közt Brüsszel és Ljubjana is megemlítésre kerül.
+
+
+
+---
 
 [1]: https://www.channelnewsasia.com/news/singapore/fashionable-young-adults-singapore-not-to-own-car-sitoh-yih-pin-10736852
 
