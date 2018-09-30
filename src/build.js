@@ -144,17 +144,22 @@ function postsFor(language) {
 
   const items = livePosts.filter(
     post => post.versions[language].parsed.title
-  ).map(
-    post => Object.assign(
+  ).map(post => {
+    const props = post.versions[language].props || {}
+
+    return Object.assign(
       post,
       {
         url: '/' + (language == DEFAULT_LANGUAGE ? '' : language+'/') + post.label,
-        description: post.versions[language].props.description,
+        description: props.description,
         title: post.versions[language].parsed.title,
-        language
+        language,
+
+        published: props.published ? new Date(props.published) : mtime,
+        updated: props.updated ? new Date(props.updated) : null,
       }
     )
-  )
+  })
 
   Object.assign(p.page, {
     contents:   indexTemplates.tPostList(items),

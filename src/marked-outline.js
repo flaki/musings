@@ -1,7 +1,8 @@
 import marked from 'marked'
+import { machineDate, localeDate } from './util/datefmt.js'
 
 
-export default function(md, options) {
+export default function(md, options, props) {
   const renderer = new marked.Renderer()
   const rHeading = renderer.heading
   const rText = renderer.text
@@ -22,9 +23,17 @@ export default function(md, options) {
     return rHeading.apply(renderer, args)
   }
 
-  // Minor text autofixes
+  // Content fixes
   renderer.text = (...args) => {
+    // Transform -- into em-dash
     args[0] = args[0].replace(/\s--\s/g,'&mdash;')
+
+    // Locale-aware dates
+    args[0] = args[0].replace(/@(\d{4}-\d{2}-\d{2})/g, (_, date) => {
+      return `<time datetime="${machineDate(date)}">${localeDate(props.language, date)}</time>`
+    })
+
+
 
     return rText.apply(renderer, args)
   }

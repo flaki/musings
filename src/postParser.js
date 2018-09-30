@@ -60,7 +60,7 @@ function chunks(md) {
 
   // Parse all versions of the post
   Object.values(versions).forEach(v => {
-    const parsed = marked(v.parts.join('\n\n'))
+    const parsed = marked(v.parts.join('\n\n'), {}, v.props)
 
     // Carve out the main title
     // TODO: bug: all language versions get the same title
