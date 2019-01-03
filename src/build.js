@@ -155,7 +155,7 @@ function postsFor(language) {
         title: post.versions[language].parsed.title,
         language,
 
-        published: props.published ? new Date(props.published) : mtime,
+        published: props.published ? new Date(props.published) : post.stats.mtime,
         updated: props.updated ? new Date(props.updated) : null,
       }
     )
