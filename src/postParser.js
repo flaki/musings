@@ -26,6 +26,23 @@ function findTitleInOutline(outline) {
 function chunks(md) {
   if (typeof md !== 'string') return {}
 
+  // Remove custom CSS & JS and metadata from the source and add them to the code
+  const codechunks = []
+  const rx = /```(js|css)([\s\S]+?)```/gm
+
+  md = md.replace(rx, (match, type, content) => {
+    switch (type) {
+      case 'css':
+        codechunks.push(`<style>${content}</style>`)
+        break
+
+      case 'js':
+        codechunks.push(`<script>${content}</script>`)
+        break
+    }
+    return ''
+  })
+
   // Get props and markdown
   const chunks = md.split(/\n\n---\n/g).map(c => props(c))
 
@@ -61,6 +78,9 @@ function chunks(md) {
   // Parse all versions of the post
   Object.values(versions).forEach(v => {
     const parsed = marked(v.parts.join('\n\n'), {}, v.props)
+
+    // prepend codechunks to parsed html
+    parsed.html =  codechunks.join('\n') + parsed.html
 
     // Carve out the main title
     // TODO: bug: all language versions get the same title
