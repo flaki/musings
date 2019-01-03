@@ -73,7 +73,7 @@ function chunks(md) {
 }
 
 function props(chunk) {
-  const rx = /\s\s+(\w+): (.*)(\n|$)/g
+  const rx = /[\t ]{2,}(\w+): ([^\n]+)(?:\n|$)/g
   const props = {}
 
   let match
