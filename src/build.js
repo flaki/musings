@@ -14,8 +14,6 @@ import { DEBUG } from './util/debug.js'
 // Creates absolute paths from paths relative to project root
 const R = (...components) => path.join(__dirname, '../', ...components)
 
-const HOST = process.env['CFG_HOST'] || 'https://musings.flak.is/'
-
 import { LANGUAGES, DEFAULT_LANGUAGE } from './languages.js'
 
 
@@ -31,8 +29,8 @@ fs.ensureDirSync(R('_site'))
 // Symlinks to static assets
 DEBUG('Symlinking assets directories...')
 
-fs.ensureSymlinkSync(R('img'), R('_site/img'))
-fs.ensureSymlinkSync(R('assets'), R('_site/assets'))
+fs.ensureSymlinkSync('../img', R('_site/img'), 'dir')
+fs.ensureSymlinkSync('../assets', R('_site/assets'), 'dir')
 
 
 // Read posts
@@ -100,10 +98,10 @@ LANGUAGES.forEach(language => {
       title: [ parsed.title||p.title, siteConfig.sitename ].join(' \u2014 '),
       description: parsed.description || p.description,
 
-      socialImage: social ? (social.includes('/') ? social : HOST+'img/social/'+social) : '',
+      socialImage: social ? (social.includes('/') ? social : siteConfig.siteroot+'img/social/'+social) : '',
 
       url: p.url,
-      fullUrl: HOST+p.url,
+      fullUrl: siteConfig.siteroot+p.url,
     })
 
     const html = render(pageTemplate, Object.assign(
