@@ -19,20 +19,6 @@
     "build": "NODE_ICU_DATA=./node_modules/full-icu/icudt62l.dat node build.js",
     "build-debug": "DEBUG=1 NODE_ICU_DATA=./node_modules/full-icu/icudt62l.dat node build.js"
   },
-  "now": {
-    "alias": "musings.flak.is",
-    "type": "static",
-    "files": [ "_site" ],
-    "static": {
-      "public": "_site",
-      "cleanUrls": true,
-      "rewrites": [
-        {
-          "source": "/",
-          "destination": "/index.html"
-        }
-      ]
-    }
   },
   "repository": {
     "type": "git",

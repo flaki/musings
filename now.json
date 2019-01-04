@@ -1,0 +1,16 @@
+{
+  "alias": "musings.flak.is",
+  "version": 1,
+  "type": "static",
+  "files": [ "_site" ],
+  "static": {
+    "public": "_site",
+    "cleanUrls": true,
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
