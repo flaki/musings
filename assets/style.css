@@ -79,6 +79,8 @@ main, article {
 article {
   max-width: 40rem;
 }
+
+article video,
 article img {
   max-width: 100%;
 }
