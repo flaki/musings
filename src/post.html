@@ -5,6 +5,12 @@
 
 	<link rel="stylesheet" href="/assets/fonts/fonts.css">
 	<link rel="stylesheet" href="/assets/style.css">
+
+	<link rel="stylesheet" href="/assets/vendor/dialog-polyfill/dialog-polyfill.css">
+	<script src="/assets/vendor/dialog-polyfill/dialog-polyfill.js"></script>
+
+	<link rel="stylesheet" href="/assets/gallery.css">
+	<script src="/assets/gallery.js"></script>
 </head>
 
 <body lang="${page.language}">
@@ -19,6 +25,11 @@
 	<footer>
 		<a class="back" title="Home" href="./">&larr;</a>
 	</footer>
+
+	<dialog class="gallery">
+    <div>Gallery</div>
+    <button class="close">Close</button>
+  </dialog>
 </body>
 
 </html>

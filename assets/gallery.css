@@ -1,0 +1,79 @@
+dialog.gallery {
+  position: fixed;
+  top: 50%;
+  transform: translate(0, -50%);
+
+  background: black;
+  padding: 0;
+  border: 1rem solid black;
+  box-sizing: content-box;
+}
+
+dialog.gallery.zoomedin {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+}
+
+dialog.gallery + .backdrop, /* polyfill */
+dialog.gallery::backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+dialog.gallery .close {
+  cursor: pointer;
+
+  background: white;
+  border: .16rem solid white;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 135 135'%3E%3Cpath d='M68 0A68 68 0 0 0 0 68a68 68 0 0 0 68 67 68 68 0 0 0 67-67A68 68 0 0 0 68 0zm28 15l28 27-29 25 32 20-24 30-30-24-35 26-24-31 36-18-39-19 22-27 26 21z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  text-indent: 5rem;
+  overflow: hidden;
+
+  position: absolute;
+  right: -1rem;
+  top: -1rem;
+}
+dialog.gallery.zoomedin .close {
+  top: .5rem;
+  right: 1rem;
+}
+
+dialog.gallery:not(.zoomedin) img {
+	object-fit: contain;
+	justify-self: flex-start;
+	align-self: center;
+	width: 100%;
+}
+dialog.gallery label {
+  color: white;
+
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 2rem .4rem 0;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,.5) 1.5rem, black)
+}
+
+dialog.gallery.zoomedin img {
+  width: auto;
+  height: auto;
+  max-width: unset;
+}
+dialog.gallery.zoomedin label {
+  display: none;
+}

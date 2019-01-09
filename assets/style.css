@@ -78,6 +78,7 @@ main, article {
 
 article {
   max-width: 40rem;
+  overflow-x: hidden;
 }
 
 article video,
