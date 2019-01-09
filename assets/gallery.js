@@ -20,12 +20,6 @@ setTimeout(() => {
     dialog.showModal()
   }))
 
-  document.querySelector('#show').onclick = function() {
-    document.querySelector('.gallery div').innerHTML = ''
-    document.querySelector('.gallery div').insertAdjacentHTML('beforeend', '<img src="http://blog-local.flak.is/img/africa/landcruiser.jpg" alt="" /><label>Chrischa was well-prepared: his Land Cruiser had a fold-out rooftop tent. Not only that it took maybe a minute to set up (and tear down), but also perfect vantage point and protection against predators!</label>')
-    dialog.showModal()
-  }
-
   document.querySelector('dialog.gallery button.close').onclick = function() {
     dialog.close()
   }
