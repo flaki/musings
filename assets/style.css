@@ -92,10 +92,41 @@ article h2 + p {
   margin-top: 0;
 }
 
-article video,
-article img {
+
+/* Center single images/gifs/videos */
+article p>video:only-child,
+article p>img:only-child {
+  display: block;
+  margin: auto;
   max-width: 100%;
 }
+
+
+/* Panorama images are panned to reveal the entire image */
+@keyframes pano {
+  0 {
+    left: -1rem;
+  }
+  100% {
+    left: calc(-200vw - 1rem)
+  }
+}
+
+article p>img:only-child[src$=".pano.jpg"] {
+  max-width: unset;
+  width: 300vw;
+
+  position: relative;
+  left: -1rem;
+
+  animation: pano 30s ease-in-out alternate infinite;
+
+  /* Don't make the panorama scroller bigger than half the
+     screen height, crop if needed */
+  max-height: 50vh;
+  object-fit:cover
+}
+
 
 
 
