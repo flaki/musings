@@ -1,11 +1,13 @@
 import marked from 'marked'
 import { machineDate, localeDate } from './util/datefmt.js'
+import { processImage } from './processing.js'
 
 
 export default function(md, options, props) {
   const renderer = new marked.Renderer()
   const rHeading = renderer.heading
   const rText = renderer.text
+  const rImage = renderer.image
 
   // Pull outline (heading structure) from the post
   let outline = []
@@ -23,9 +25,41 @@ export default function(md, options, props) {
     return rHeading.apply(renderer, args)
   }
 
+  // Image pre-processing
+  // image(string href, string title, string text)
+  renderer.image = (...args) => {
+    // If image is pointing to "sources" directory, pre-process it
+    const m = args[0].match(/^\/sources\/img\/(.*)\.(jpg|gif|gifv|mp4)$/i)
+    if (m) {
+      // Preprocess JPEGs
+      if (m[2] == 'jpg') {
+        const res = processImage(`${m[1]}.${m[2]}`)
+
+        // If successfully generated derived image files, use thumbnail
+        // in source.
+        // TODO: currently full-size image is only exposed via JS
+        if (res) {
+          args[0] = res.thumbnail.substring(res.thumbnail.indexOf('/img/'))
+        }
+
+      // Simply copy GIFs
+      // TODO: preprocess, convert to muted repeating autoplay video
+      } else if (m[2] == 'gif' || m[2] == 'gifv') {
+
+      // Copy over videos & return embed code
+      // TODO: preprocess
+      } else if (m[2] == 'mp4') {
+
+      }
+    }
+
+    return rImage.apply(renderer, args)
+  }
+
   // Content fixes
   renderer.text = (...args) => {
     // Transform -- into em-dash
+    // todo: smartypants: true should enable this by default
     args[0] = args[0].replace(/\s--\s/g,'&mdash;')
 
     // Locale-aware dates
