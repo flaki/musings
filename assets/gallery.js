@@ -10,7 +10,8 @@ setTimeout(() => {
     const container = document.querySelector('.gallery div')
 
     container.innerHTML = ''
-    container.insertAdjacentHTML('beforeend', `<img src="${src}" alt="${alt.replace(/\"/g,'&quot;')}" /><label>${alt}</label>`)
+    container.style.background = `url('${src}') left top/contain no-repeat`
+    container.insertAdjacentHTML('beforeend', `<img src="${src.replace('thumb.','')}" alt="${alt.replace(/\"/g,'&quot;')}" /><label>${alt}</label>`)
 
     let cw = aspect < 1 ? `${aspect * 90}vmin` : `90vmin`
     let ch = aspect < 1 ? `90vmin` : `${90 / aspect}vmin`
