@@ -36,7 +36,7 @@ export function processImage(imagefile, options) {
   // magick convert -auto-orient -resize '256x256' -quality 60 ./sources/img/africa/hornbills_nest.jpg ./img/africa/hornbills_nest.thumb.jpg
   if (!fs.existsSync(thumbnail) || overwrite) {
     try {
-      run(`magick convert -auto-orient -resize '256x256' -quality 60 "${target}" "${thumbnail}"`)
+      run(`magick convert -strip -resize '256x256' -quality 60 "${target}" "${thumbnail}"`)
     }
     catch(e) {
       console.error('Failed: ' + e.cmd)
