@@ -5,13 +5,13 @@ setTimeout(() => {
     document.querySelectorAll('article li>img')
   ).forEach(img => img.addEventListener('click', (e) => {
     const src = e.target.src
-    const alt = e.target.alt
+    const text = e.target.title || e.target.alt || ''
     const aspect = img.width/img.height
     const container = document.querySelector('.gallery div')
 
     container.innerHTML = ''
     container.style.background = `url('${src}') left top/contain no-repeat`
-    container.insertAdjacentHTML('beforeend', `<img src="${src.replace('thumb.','')}" alt="${alt.replace(/\"/g,'&quot;')}" /><label>${alt}</label>`)
+    container.insertAdjacentHTML('beforeend', `<img src="${src.replace('thumb.','')}" alt="${e.target.alt}" /><label>${text}</label>`)
 
     let cw = aspect < 1 ? `${aspect * 90}vmin` : `90vmin`
     let ch = aspect < 1 ? `90vmin` : `${90 / aspect}vmin`
