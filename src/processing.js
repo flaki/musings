@@ -10,9 +10,11 @@ export function processImage(imagefile, options) {
   const source = path.join(__dirname, '../sources/img', imagefile)
        ,target = path.join(__dirname, '../img', imagefile)
        ,thumbnail = thumb(target)
+       ,smallsize = small(target)
+
 
   // Options
-  const { overwrite } = (options || {})
+  const { overwrite, fullwidth } = (options || {})
 
   if (!fs.existsSync(source)) {
     console.error(`"${source}" not found.`)
@@ -40,16 +42,32 @@ export function processImage(imagefile, options) {
       console.error('Failed: ' + e.cmd)
       return false
     }
-    DEBUG(`"${thumb(target)}" created.`)
+    DEBUG(`"${thumbnail}" created.`)
+  }
+
+  // magick convert -auto-orient -resize '720x720' -quality 60 ./sources/img/africa/hornbills_nest.jpg ./img/africa/hornbills_nest.small.jpg
+  if (fullwidth && (!fs.existsSync(smallsize) || overwrite)) {
+    try {
+      run(`magick convert -resize '720x720' -quality 60 "${target}" "${smallsize}"`)
+    }
+    catch(e) {
+      console.error('Failed: ' + e.cmd)
+      return false
+    }
+    DEBUG(`"${smallsize}" created.`)
   }
 
   return {
-    source, target, thumbnail
+    source, target, thumbnail, smallsize
   }
 }
 
 function thumb(path) {
   return path.replace(/\.jpg$/, '.thumb.jpg')
+}
+
+function small(path) {
+  return path.replace(/\.jpg$/, '.small.jpg')
 }
 
 function run(cmd) {

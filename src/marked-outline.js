@@ -75,5 +75,14 @@ export default function(md, options, props) {
   // Run marked
   let html = marked(md, Object.assign({}, options, { renderer: renderer }))
 
+  // TODO: move these hacks out into the lexer/tokenizer step
+  html = html.replace(
+    /<p><img src="\/img\/([\w\/]+)\.thumb\.jpg"/g,
+    (match, file) => {
+      const res = processImage(`${file}.jpg`, { fullwidth: true })
+      return match.replace('.thumb.jpg','.small.jpg')
+    }
+  )
+
   return { html, outline }
 }
