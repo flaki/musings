@@ -1,6 +1,10 @@
 import marked from 'marked'
 import { machineDate, localeDate } from './util/datefmt.js'
-import { processImage } from './processing.js'
+import { processImage, processGif } from './processing.js'
+
+// Debugging
+import { DEBUG } from './util/debug.js'
+
 
 
 export default function(md, options, props) {
@@ -31,6 +35,8 @@ export default function(md, options, props) {
     // If image is pointing to "sources" directory, pre-process it
     const m = args[0].match(/^\/sources\/img\/(.*)\.(jpg|gif|gifv|mp4)$/i)
     if (m) {
+      DEBUG(`Preprocessing as image: ${m[1]}.${m[2]}`)
+
       // Preprocess JPEGs
       if (m[2] == 'jpg') {
         const res = processImage(`${m[1]}.${m[2]}`)
@@ -42,14 +48,31 @@ export default function(md, options, props) {
           args[0] = res.thumbnail.substring(res.thumbnail.indexOf('/img/'))
         }
 
-      // Simply copy GIFs
-      // TODO: preprocess, convert to muted repeating autoplay video
+      // Preprocess GIFs, convert to looped/muted autoplay video embeds
       } else if (m[2] == 'gif' || m[2] == 'gifv') {
+        DEBUG(`Preprocessing as GIF: ${m[1]}.${m[2]}`)
+
+        const res = processGif(`${m[1]}.${m[2]}`)
+
+        if (res) {
+          const result = res.target.substring(res.target.indexOf('/img/'))
+
+          // TODO: fallback and size
+          let fallback = ''
+          if (res.fallback) {
+            let fallbackurl = res.fallback.substring(res.fallback.indexOf('/img/'))
+            fallback = `<p>Video is not supported, <a href="${fallbackurl}">click here</a> for a fallback GIF for "${args[2]}" (size: ? MB)</p>`
+          }
+
+          return `<video autoplay muted loop><source src="${result}" type="video/mp4">${fallback}</video>`
+        }
 
       // Copy over videos & return embed code
       // TODO: preprocess
       } else if (m[2] == 'mp4') {
+        DEBUG(`Preprocessing as GIF: ${m[1]}.${m[2]}`)
 
+        console.error('Warning: not implemented')
       }
     }
 
@@ -83,6 +106,8 @@ export default function(md, options, props) {
       return match.replace('.thumb.jpg','.small.jpg')
     }
   )
+  // TODO: .pano images
+
 
   return { html, outline }
 }
