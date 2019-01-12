@@ -64,10 +64,10 @@ dialog.gallery label {
 
   position: absolute;
   left: 0;
-  bottom: -.1rem;
+  bottom: -.2rem;
   width: 100%;
-  padding: 2rem .4rem .4rem;
-  background: linear-gradient(to bottom, transparent, rgba(0,0,0,.5) 1.5rem, black);
+  padding: 1rem .4rem .4rem;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,.6) 1rem, black);
 
   font-size: calc(.4rem + 1vmin);
 }
@@ -84,7 +84,7 @@ dialog.gallery.zoomedin label {
 
 /* Gallery image thumbnails */
 /* Unordered lists of images are shown as a small image thumbnail gallery */
-article ul {
+article > ul {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(6rem, max-content));
   grid-gap: .5rem;
@@ -95,11 +95,11 @@ article ul {
   padding: 0;
 }
 
-article ul>li {
+article > ul>li {
   display: contents;
 }
 
-article ul img {
+article > ul img {
   object-fit: cover;
   max-width: 100%;
   max-height: 12rem;
@@ -110,14 +110,14 @@ article ul img {
   transition: .4s ease all;
 }
 
-article ul img:hover {
+article > ul img:hover {
   cursor: pointer;
   border: .1rem solid black;
 }
 
 /* for lone odd images while screen width is narrow */
 @media screen and (max-width: 30rem) {
-  article ul li:nth-of-type(3):last-of-type img {
+  article > ul li:nth-of-type(3):last-of-type img {
     grid-column: 1 / 3;
     max-height: unset;
     justify-self: center; /* portrait images are too tall to be full-width still */

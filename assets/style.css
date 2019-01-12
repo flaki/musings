@@ -128,6 +128,20 @@ article p>img:only-child[src$=".pano.jpg"] {
 }
 
 
+/* Block quotes inside the main article content */
+article > blockquote {
+  padding: 1em;
+  margin-left: .5rem;
+  background: #eee;
+  border-left: .5rem solid #ddd;
+}
+
+/* Conversation blurbs */
+article > blockquote > ul {
+  list-style-type: "\2012  ";
+  margin: 0;
+  padding: 0 0 0 1em;
+}
 
 
 time::before {
