@@ -6,6 +6,39 @@ import fs from 'fs'
 import { DEBUG } from './util/debug.js'
 
 
+export function processPanorama(sourcefile, ) {
+  const source = path.join(__dirname, '../sources/img', sourcefile)
+       ,target = path.join(__dirname, '../img', sourcefile).replace('.edited','')
+       ,storedpreview = replaceExtension(source, '.preview.jpg')
+       ,targetpreview = replaceExtension(target, '.preview.jpg')
+
+  // Preview (small-size panning animation) already exists, just copy it over
+  if (fs.existsSync(storedpreview)) {
+    fs.copyFileSync(storedpreview, targetpreview)
+
+    return {
+      source, target, targetpreview
+    }
+  }
+
+  // Generate preview image
+  try {
+    DEBUG(`  Generating panorama preview...`)
+    convertJpegAndOptimize(source, targetpreview, { size: 'x720' })
+  }
+  catch(e) {
+    console.error('Failed: ' + (e.cmd||e))
+    return false
+  }
+
+  return {
+    source, target, targetpreview
+  }
+
+  // TODO: full-size & VR view
+  DEBUG(`"${target}" created.`)
+}
+
 export function processGif(sourcefile, options) {
   const source = path.join(__dirname, '../sources/img', sourcefile)
        ,target = path.join(__dirname, '../img', gifv(sourcefile)).replace('.edited','')

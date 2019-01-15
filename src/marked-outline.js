@@ -1,6 +1,6 @@
 import marked from 'marked'
 import { machineDate, localeDate } from './util/datefmt.js'
-import { processImage, processGif } from './processing.js'
+import { processImage, processGif, processPanorama } from './processing.js'
 
 // Debugging
 import { DEBUG } from './util/debug.js'
@@ -33,13 +33,27 @@ export default function(md, options, props) {
   // image(string href, string title, string text)
   renderer.image = (...args) => {
     // If image is pointing to "sources" directory, pre-process it
-    const m = args[0].match(/^\/sources\/img\/(.*)\.(jpg|gif|gifv|mp4)$/i)
+    const m = args[0].match(/^\/sources\/img\/(|[\w\/]+?\/)(|PANO@)([\w\.-]+?)\.(jpg|gif|gifv|mp4)$/i)
     if (m) {
-      DEBUG(`Preprocessing as image: ${m[1]}.${m[2]}`)
+      const [ , path, prefix, name, extension ] = m,
+        filename = path + prefix + name + '.' + extension
+
+      if (prefix === 'PANO@') {
+        DEBUG(`Preprocessing as panorama image: ${filename}`)
+
+        const res = processPanorama(filename)
+        if (res) {
+          args[0] = res.targetpreview.substring(res.targetpreview.indexOf('/img/'))
+        }
+
+        return rImage.apply(renderer, args).replace('<img','<img class="panorama"')
+      }
 
       // Preprocess JPEGs
-      if (m[2] == 'jpg') {
-        const res = processImage(`${m[1]}.${m[2]}`)
+      if (extension == 'jpg') {
+        DEBUG(`Preprocessing as image: ${filename}`)
+
+        const res = processImage(`${filename}`)
 
         // If successfully generated derived image files, use thumbnail
         // in source.
@@ -49,10 +63,10 @@ export default function(md, options, props) {
         }
 
       // Preprocess GIFs, convert to looped/muted autoplay video embeds
-      } else if (m[2] == 'gif' || m[2] == 'gifv') {
-        DEBUG(`Preprocessing as GIF: ${m[1]}.${m[2]}`)
+      } else if (extension == 'gif' || extension == 'gifv') {
+        DEBUG(`Preprocessing as GIF: ${filename}`)
 
-        const res = processGif(`${m[1]}.${m[2]}`)
+        const res = processGif(`${filename}`)
 
         if (res) {
           const result = res.target.substring(res.target.indexOf('/img/'))
@@ -69,10 +83,11 @@ export default function(md, options, props) {
 
       // Copy over videos & return embed code
       // TODO: preprocess
-      } else if (m[2] == 'mp4') {
-        DEBUG(`Preprocessing as GIF: ${m[1]}.${m[2]}`)
+      } else if (extension == 'mp4') {
+        DEBUG(`Preprocessing as video: ${filename}`)
 
-        console.error('Warning: not implemented')
+        console.error('  [!] Warning: not implemented')
+        return `<!-- VIDEO: ${filename} -->`
       }
     }
 
@@ -106,7 +121,12 @@ export default function(md, options, props) {
       return match.replace('.thumb.jpg','.small.jpg')
     }
   )
-  // TODO: .pano images
+
+  // Save panorama class on container <p> instead of image
+  html = html.replace(
+    /<p(><img)( class="panorama")/g,
+    (...args) => `<p${args[2]}${args[1]}`
+  )
 
 
   return { html, outline }

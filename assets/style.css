@@ -104,27 +104,36 @@ article p>img:only-child {
 
 /* Panorama images are panned to reveal the entire image */
 @keyframes pano {
-  0 {
-    left: -1rem;
+  0% {
+    transform: translateX(33%);
   }
   100% {
-    left: calc(-200vw - 1rem)
+    transform: translateX(-32%);
   }
 }
 
-article p>img:only-child[src$=".pano.jpg"] {
-  max-width: unset;
-  width: 300vw;
+/*  Fix article padding to make panorama span the whole viewport width */
+article p.panorama {
+  margin: 0 -1rem;
+}
+
+article p.panorama>img {
+  width: 300%;
 
   position: relative;
   left: -1rem;
 
-  animation: pano 30s ease-in-out alternate infinite;
+  animation: pano 18s linear alternate infinite;
 
   /* Don't make the panorama scroller bigger than half the
      screen height, crop if needed */
   max-height: 50vh;
-  object-fit:cover
+  object-fit: cover;
+  /* Avoid overstretching the aspect ratio (resulting in top/bottom cropping) */
+  max-width: 280vh;
+
+  /* avoid calc() in the animation keyframe transform */
+  margin-left: -100%;
 }
 
 
