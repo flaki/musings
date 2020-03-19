@@ -18,9 +18,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "serve",
     "deploy": "npm run build && now --public && now alias",
-    "build": "NODE_ICU_DATA=./node_modules/full-icu/icudt62l.dat node build.js",
+    "build": "node build.js",
     "build-debug": "DEBUG=1 NODE_ICU_DATA=./node_modules/full-icu/icudt62l.dat node build.js"
-  },
   },
   "repository": {
     "type": "git",

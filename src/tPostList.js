@@ -12,16 +12,21 @@ export function post(post) {
 
   const updated = post.updated ? ` (${l10n_updated[post.language]}: <time datetime="${machineDate(post.updated)}">${langDate(post.updated)}</time>)` : ''
 
-
+  // Giant quick hack to avoid double-encoding html entities in `post.title`
   return html`<li>
-    <h2><a href="${post.url}">${post.title}</a></h2>
+    <h2><a href="${post.url}">${ { toString: _ => post.title } }</a></h2>
     <p>${post.description}</p>
     <p><time datetime="${machineDate(publication)}">${langDate(publication)}</time>${[updated]}</p>
   </li>`
 }
 
 export default function(posts) {
+  // Sort to last-updated
+  let sortedPosts = Array.from(posts)
+
+  sortedPosts.sort( (p1,p2) => (p2.updated||p2.published)-(p1.updated||p1.published) )
+
   return `<ul class="posts">
-    ${posts.map(p => post(p)).join('\n')}
+    ${sortedPosts.map(p => post(p)).join('\n')}
   </ul>`
 }
