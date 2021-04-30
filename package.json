@@ -3,23 +3,22 @@
   "version": "1.0.0",
   "description": "Flaki's musings. You may also call it a blog.",
   "main": "build.js",
+  "type": "module",
   "dependencies": {
-    "esm": "^3.0.0",
     "fs-extra": "^7.0.0",
     "full-icu": "1.2.1",
     "klaw-sync": "^6.0.0",
-    "marked": "^0.5.0",
-    "serve": "latest"
+    "marked": "^0.5.0"
   },
   "devDependencies": {
-    "dialog-polyfill": "^0.4.10"
+    "dialog-polyfill": "^0.4.10",
+    "servor": "^4.0.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "serve",
-    "deploy": "npm run build && now --public && now alias",
+    "start": "servor --static",
     "build": "node build.js",
-    "build-debug": "DEBUG=1 NODE_ICU_DATA=./node_modules/full-icu/icudt62l.dat node build.js"
+    "build-debug": "DEBUG=1 node build.js"
   },
   "repository": {
     "type": "git",

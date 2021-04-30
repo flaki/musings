@@ -1,5 +1,3 @@
-require = require("esm")(module)
+import { build } from './src/build.js';
 
-let {build} = require("./src/build.js")
-
-console.log(build)
+console.log(build);

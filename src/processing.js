@@ -2,6 +2,12 @@ import { execSync } from 'child_process'
 import path from 'path'
 import fs from 'fs'
 
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+
+
 // Debugging
 import { DEBUG } from './util/debug.js'
 
@@ -49,7 +55,7 @@ export function processGif(sourcefile, options) {
   // ffmpeg -i lobatse_rainstorm.gifv -vcodec libvpx -b:v 2M -an -auto-alt-ref 0 -f webm output.gifv
   if (!fs.existsSync(target) || overwrite) {
     try {
-      run(`ffmpeg -i ${source} -vcodec libvpx -b:v 2M -an -auto-alt-ref 0 -f webm ${target}`)
+      run(`ffmpeg -i ${source} -vcodec libvpx -b:v 2M -an -auto-alt-ref 0 -f webm ${target}`);
     }
     catch(e) {
       console.error('Failed: ' + e.cmd)
@@ -174,5 +180,6 @@ function small(path) {
 }
 
 function run(cmd) {
+  DEBUG('$> '+cmd)
   return execSync(cmd)
 }

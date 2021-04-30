@@ -8,6 +8,12 @@ import parse from './postParser.js'
 
 import * as siteConfig from './site-config.js'
 
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+
+
 // Debugging
 import { DEBUG } from './util/debug.js'
 
@@ -16,21 +22,25 @@ const R = (...components) => path.join(__dirname, '../', ...components)
 
 import { LANGUAGES, DEFAULT_LANGUAGE } from './languages.js'
 
+const OUTPUT_DIR = '_site'
 
 
 
-// Create/clean _site directory
-DEBUG('Truncating "_site" folder...')
 
-fs.ensureDirSync(R('_site'))
-//fs.emptyDirSync(R('_site'))
+// Create/clean output directory
+DEBUG('Truncating output folder...')
+
+fs.ensureDirSync(R(OUTPUT_DIR))
+//fs.emptyDirSync(R(OUTPUT_DIR))
 
 
 // Symlinks to static assets
 DEBUG('Symlinking assets directories...')
 
-fs.ensureSymlinkSync('../img', R('_site/img'), 'dir')
-fs.ensureSymlinkSync('../assets', R('_site/assets'), 'dir')
+//fs.ensureSymlinkSync('../img', R(OUTPUT_DIR+'/img'), 'dir')
+//fs.ensureSymlinkSync('../assets', R(OUTPUT_DIR+'/assets'), 'dir')
+fs.copy(path.join(__dirname, '../img'), R(OUTPUT_DIR+'/img'))
+fs.copy(path.join(__dirname, '../assets'), R(OUTPUT_DIR+'/assets'))
 
 
 // Read posts
@@ -79,7 +89,7 @@ const pageTemplate = fs.readFileSync(R('src/post.html')).toString()
 // Generate index page listing
 LANGUAGES.forEach(language => {
   const postsInLang = postsFor(language)
-  const siteroot = '_site/' + (language == DEFAULT_LANGUAGE ? '' : language+'/')
+  const siteroot = OUTPUT_DIR+'/' + (language == DEFAULT_LANGUAGE ? '' : language+'/')
 
   fs.ensureDirSync(R(siteroot))
   fs.writeFileSync(R(siteroot, 'index.html'), postsInLang.htmlList)
