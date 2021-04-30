@@ -1,4 +1,6 @@
+    social_image: hacknlearn-social.png
     published: 2020-03-19
+    updated: 2020-03-20
 
 ---
 
@@ -41,7 +43,7 @@ Unfortunately text is also one of the lowest-bandwidth communication methods, an
 We have decided to have a parallel audio & video chat open during the meetup (we used [Zoom](http://zoom.us/) for this purpose). This channel was an informal "hangout" to ask questions and discuss things. We were also careful to stress that this was an optional extension to the experience, not everybody needed to be present there, and whenever Elina made a quick opening or closing announcement, I was taking notes and transcribing it in our Matrix channel so people don't miss anything important. Similarly, the gist of conversations and useful tidbits coming out of the voice chat were re-shared in the text chat as well.
 
 ## The icing on the cake, add some sprinkles
-The voice chat was expected to enhance the "productivity" aspect of the meetup, but there are innumerable other ways one could improve other aspects, or simply the "fun factor" of these online events. Unfortunately, due to the shortness of time, we only got to implement one of our ideas for the last meetup but we are already thinking of other ways of enhancing people's experience (especially around making it easier to meet & get to know others).
+The voice chat was expected to enhance the "productivity" aspect of the meetup, but there are innumerable other ways one could improve other aspects, or simply the "fun factor" of these online events. Unfortunately, due to the shortness of time, we only got to implement one of our ideas for the last meetup but we are already thinking of other ways of enhancing people's experience (especially around making it easier to meet & get to know other). These icebreakers are especially important (and plenty challenging for organizers) in this online format, as building trust and connections is no less important, but a very different endeavour in the online space than in IRL.
 
 For the Hack'n'Learn we planned — like many other meetups do — to provide food. We were thinking on a more varied cuisine for upcoming events, but for the first event we settled on pizzas (with vegetarian, vegan and gluten free options). When the disaster struck we were already thinking of solving the (surprisingly hard!) problem of hygienic pizza-distribution at the meetup, and so even upon having to cancel the physical event we still didn't want to give up bringing people together around a nice meal. This was when the idea came to, instead of ordering food to the meetup space, let people *order their own*, and have it delivered straight to them.
 
