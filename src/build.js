@@ -8,6 +8,8 @@ import parse from './postParser.js'
 
 import * as siteConfig from './site-config.js'
 
+import rss from './rss.js'
+
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -97,6 +99,7 @@ LANGUAGES.forEach(language => {
   DEBUG(` - index for "${language}" locale: ${postsInLang.items.length} documents`)
 
   // Write post page
+  const rssItems = []
   postsInLang.items.forEach(p => {
     const { parsed, props } = p.versions[language]
     const social = props.social_image
@@ -108,11 +111,15 @@ LANGUAGES.forEach(language => {
       title: [ parsed.title||p.title, siteConfig.sitename ].join(' \u2014 '),
       description: parsed.description || p.description,
 
-      socialImage: social ? (social.includes('/') ? social : siteConfig.siteroot+'img/social/'+social) : '',
+      socialImage: social ? (social.includes('/') ? social : siteConfig.siteroot+'/img/social/'+social) : '',
 
       url: p.url,
       fullUrl: siteConfig.siteroot+p.url,
+
+      metadata: props,
     })
+
+    rssItems.push(page)
 
     const html = render(pageTemplate, Object.assign(
       {
@@ -135,6 +142,9 @@ LANGUAGES.forEach(language => {
 
     DEBUG(`   * ${p.filename}: ${p.title}`)
   })
+
+  fs.writeFileSync(R(siteroot, '/feed.xml'), rss(siteConfig, rssItems))
+
 })
 
 

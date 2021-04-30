@@ -7,6 +7,7 @@
   "dependencies": {
     "fs-extra": "^7.0.0",
     "full-icu": "1.2.1",
+    "html-entities": "^2.3.2",
     "klaw-sync": "^6.0.0",
     "marked": "^0.5.0"
   },

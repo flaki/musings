@@ -1,3 +1,5 @@
+import { encodeHtmlEntities } from './minihtml.js'
+
 export default function(p) {
   const { global, page, content } = p
 
@@ -7,7 +9,7 @@ export default function(p) {
 
 <title>${page.title||global.sitename}</title>
 
-<meta name="description" content="${page.description}" />
+<meta name="description" content="${encodeHtmlEntities(page.description)}" />
 <meta name="keywords" content="${page.keywords}" />
 
 <!-- Social: Twitter -->
@@ -15,7 +17,7 @@ export default function(p) {
 <meta name="twitter:site" content="@slsoftworks" />
 
 <meta name="twitter:title" content="${page.title}" />
-<meta name="twitter:description" content="${page.description}" />
+<meta name="twitter:description" content="${encodeHtmlEntities(page.description)}" />
 <meta name="twitter:image:src" content="${page.socialImage||global.socialImage}" />
 
 <!-- Social: Facebook / Open Graph -->
@@ -24,7 +26,7 @@ export default function(p) {
 <meta property="og:url" content="${page.fullUrl}" />
 
 <meta property="og:title" content="${page.title}" />
-<meta property="og:description" content="${page.description}" />
+<meta property="og:description" content="${encodeHtmlEntities(page.description)}" />
 <meta property="og:image" content="${page.socialImage||global.socialImage}" />
 `
 }
