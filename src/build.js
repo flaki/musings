@@ -129,7 +129,9 @@ LANGUAGES.forEach(language => {
       }
     ))
 
-    fs.writeFileSync(R(siteroot,`${p.label}.html`), html)
+    const fpath = R(siteroot,p.label)
+    fs.ensureDirSync(fpath)
+    fs.writeFileSync(fpath+'/index.html', html)
 
     DEBUG(`   * ${p.filename}: ${p.title}`)
   })
