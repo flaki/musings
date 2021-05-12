@@ -1,4 +1,5 @@
-import {encode as E} from 'html-entities';
+import htmlEntities from 'html-entities';
+const { encode: E } = htmlEntities;
 
 const buildDate = new Date().toUTCString()
 
