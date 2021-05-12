@@ -35,7 +35,6 @@ export default function(md, options, props) {
     // If image is pointing to "sources" directory, pre-process it
     const m = args[0].match(/^\/sources\/img\/(|[\w\/]+?\/)(|PANO@)([\w\.-]+?)\.(jpg|gif|gifv|mp4)$/i)
     if (m) {
-      console.log(m)
       const [ , path, prefix, name, extension ] = m,
         filename = path + prefix + name + '.' + extension
 
