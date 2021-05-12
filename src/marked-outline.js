@@ -35,6 +35,7 @@ export default function(md, options, props) {
     // If image is pointing to "sources" directory, pre-process it
     const m = args[0].match(/^\/sources\/img\/(|[\w\/]+?\/)(|PANO@)([\w\.-]+?)\.(jpg|gif|gifv|mp4)$/i)
     if (m) {
+      console.log(m)
       const [ , path, prefix, name, extension ] = m,
         filename = path + prefix + name + '.' + extension
 
@@ -114,13 +115,17 @@ export default function(md, options, props) {
   let html = marked(md, Object.assign({}, options, { renderer: renderer }))
 
   // TODO: move these hacks out into the lexer/tokenizer step
-  html = html.replace(
-    /<p><img src="\/img\/([\w\/]+)\.thumb\.jpg"/g,
-    (match, file) => {
-      const res = processImage(`${file}.jpg`, { fullwidth: true })
-      return match.replace('.thumb.jpg','.small.jpg')
-    }
-  )
+  // This portion tries to reprocess free-standing full-width images with a larger
+  // resolution.
+  // It currently fails to find images that were ".edited", because that tag is
+  // removed from the filename during the first time any images are processed.
+  //html = html.replace(
+  //  /<p><img src="\/img\/([\w\/]+)\.thumb\.jpg"/g,
+  //  (match, file) => {
+  //    const res = processImage(`${file}.jpg`, { fullwidth: true })
+  //    return match.replace('.thumb.jpg','.small.jpg')
+  //  }
+  //)
 
   // Save panorama class on container <p> instead of image
   html = html.replace(

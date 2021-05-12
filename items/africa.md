@@ -109,7 +109,7 @@ Sibylle told us early on into the planning that to go to the heart of the desert
 Crischa is a budding hunter (although, he'd mostly just affectionately refer to himself as _"a pig farmer with a giant industrial mincer"_), and in the days that followed his wit & skills have ended up saving our butt numerous times in the middle of the wilderness. We have also learned a ton, some of these learnings I'll try to share further below.
 
 
-### Four days in the desert -- in a broken car
+### Four days in the desert — in a broken car
 
 Crischa disconnected the cable from what seemed to be a faulty secondary system, but the car still wouldn't start.
 
@@ -156,7 +156,7 @@ First night's dinner would be open-fire grilled steak & grilled cheese. Crischa'
 
 Although it rained quite a bit on our first night, by the time we got up the thirsty desert plains have soaked up all traces of the overnight storm. The weather was nice long enough that I got to go on a quick walk (a bit further away from the camp) and record some morning nature noises: the desert felt remarkably docile.
 
-![Panorama shot of the Central Kalahari Game reserve from our first morning in the desert](/img/africa/khawakhwe_plains.pano.jpg)
+![Panorama shot of the Central Kalahari Game reserve from our first morning in the desert](/sources/img/africa/PANO@khawakhwe_plains.jpg)
 
 Our breakfast then was cut short by another shower rolling in, so we hastily packed and set out to cross the reserve towards the north to our next campsite. These alternating storms and blazing hot dry runs would continue for the whole day (and pretty much for the rest of our desert adventures) to provide us with plenty of adventure and excitement for the rest of the week...
 
@@ -166,7 +166,7 @@ Our breakfast then was cut short by another shower rolling in, so we hastily pac
     language: en
     updated: 2019-01-11
 
-### Peekaboo -- some heads pokin' out!
+### Peekaboo — some heads pokin' out!
 
 We have barely left the camp behind we soon started seeing curious animal heads poking out form behind the roadside bushes:
 

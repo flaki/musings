@@ -143,11 +143,12 @@ function convertJpegAndOptimize(source, target, options) {
 
   let commands = [
     `jpegtran -outfile '${target}' '${source}'`,
-    `exiv2 extract -ee -l '${path.dirname(target)}' '${source}'`,
-    `exiv2 insert -ie -l '${path.dirname(target)}' -S .exv '${target}'`,
+// broken in various ways
+//    `exiv2 extract '${path.dirname(target)}' --suffix .preview.exv '${source}'`,
+//    `exiv2 --insert e --location '${path.dirname(target)}' '${target}'`,
     `magick mogrify -auto-orient -resize '${size||"1920x1920"}' -quality ${quality||75} '${target}'`,
     `jpegtran -optimize -copy all -progressive -outfile '${target}' '${target}'`,
-    `rm '${replaceExtension(target, '.exv')}'`
+//    `rm '${replaceExtension(target, '.exv')}'`
   ]
 
   commands.forEach(cmd => {

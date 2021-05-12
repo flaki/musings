@@ -123,7 +123,7 @@ article p.panorama>img {
   position: relative;
   left: -1rem;
 
-  animation: pano 18s linear alternate infinite;
+  animation: pano 30s linear alternate infinite;
 
   /* Don't make the panorama scroller bigger than half the
      screen height, crop if needed */
