@@ -1,6 +1,6 @@
 import marked from 'marked'
 import { machineDate, localeDate } from './util/datefmt.js'
-import { processImage, processGif, processPanorama } from './processing.js'
+import { processImage, processGif, processPanorama, processVideo } from './processing.js'
 
 // Debugging
 import { DEBUG } from './util/debug.js'
@@ -84,10 +84,27 @@ export default function(md, options, props) {
       // Copy over videos & return embed code
       // TODO: preprocess
       } else if (extension == 'mp4') {
-        DEBUG(`Preprocessing as video: ${filename}`)
+        let [ src, title, alt ] = args;
+        if (!title) title = alt;
 
-        console.error('  [!] Warning: not implemented')
-        return `<!-- VIDEO: ${filename} -->`
+        DEBUG(`Preprocessing as video: ${filename}`)
+        const { source, target, poster, size } = processVideo(filename)
+        
+        return `<p>
+<figure data-src="${filename}">
+  <video controls poster="${imgur(poster)}">
+    <source src="${imgur(target)}" type="video/mp4">
+    <em>Video is not supported in your browser,
+      <a download href="${imgur(target)}">click here</a>
+      to download the video of
+      "${alt}"
+      (${size})
+    </em>
+  </video>
+  <figcaption>${title} (${size})</figcaption>
+</figure>
+</p>`
+
       }
     }
 
@@ -134,4 +151,8 @@ export default function(md, options, props) {
 
 
   return { html, outline }
+}
+
+function imgur(url) {
+  return url.substring(url.indexOf('/img/'))
 }

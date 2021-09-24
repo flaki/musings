@@ -19,7 +19,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "servor --static _site",
     "build": "node build.js",
-    "build-debug": "DEBUG=1 node build.js"
+    "build-debug": "DEBUG=1 node build.js",
+    "deploy": "OUTPUT_DIR=./_deploy/live node build.js",
+    "deploy-preview": "OUTPUT_DIR=./_deploy/preview node build.js"
   },
   "repository": {
     "type": "git",

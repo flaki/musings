@@ -94,11 +94,18 @@ article h2 + p {
 
 
 /* Center single images/gifs/videos */
+article figure>video,
 article p>video:only-child,
 article p>img:only-child {
   display: block;
   margin: auto;
   max-width: 100%;
+}
+
+article figure>figcaption {
+  text-align: center;
+  padding: .5em;
+  font-style: italic;
 }
 
 
@@ -123,7 +130,7 @@ article p.panorama>img {
   position: relative;
   left: -1rem;
 
-  animation: pano 30s linear alternate infinite;
+  animation: pano 18s linear alternate infinite;
 
   /* Don't make the panorama scroller bigger than half the
      screen height, crop if needed */

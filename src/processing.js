@@ -1,6 +1,6 @@
 import { execSync } from 'child_process'
 import path from 'path'
-import fs from 'fs'
+import fs from 'fs-extra'
 
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -15,8 +15,8 @@ import { DEBUG } from './util/debug.js'
 export function processPanorama(sourcefile, ) {
   const source = path.join(__dirname, '../sources/img', sourcefile)
        ,target = path.join(__dirname, '../img', sourcefile).replace('.edited','')
-       ,storedpreview = replaceExtension(source, '.preview.jpg')
-       ,targetpreview = replaceExtension(target, '.preview.jpg')
+       ,storedpreview = replaceExtension(source, '.pano.jpg')
+       ,targetpreview = replaceExtension(target, '.pano.jpg')
 
   // Preview (small-size panning animation) already exists, just copy it over
   if (fs.existsSync(storedpreview)) {
@@ -54,11 +54,14 @@ export function processGif(sourcefile, options) {
 
   // ffmpeg -i lobatse_rainstorm.gifv -vcodec libvpx -b:v 2M -an -auto-alt-ref 0 -f webm output.gifv
   if (!fs.existsSync(target) || overwrite) {
+    // Make sure target dir exists
+    fs.ensureDirSync(dirname(target))
+
     try {
       run(`ffmpeg -i ${source} -vcodec libvpx -b:v 2M -an -auto-alt-ref 0 -f webm ${target}`);
     }
     catch(e) {
-      console.error('Failed: ' + e.cmd)
+      console.error('Failed: ', (e.cmd ?? e))
       return false
     }
     DEBUG(`"${target}" created.`)
@@ -84,10 +87,13 @@ export function processImage(imagefile, options) {
     return false
   }
 
-  // magick convert -auto-orient -resize '1920x1920' -quality 75 ./sources/img/africa/hornbills_nest.jpg ./img/africa/hornbills_nest.jpg
+  // (magick) convert -auto-orient -resize '1920x1920' -quality 75 ./sources/img/africa/hornbills_nest.jpg ./img/africa/hornbills_nest.jpg
   if (!fs.existsSync(target) || overwrite) {
+    // Make sure target dir exists
+    fs.ensureDirSync(dirname(target))
+
     try {
-      run(`magick convert -auto-orient -resize '1920x1920' -quality 75 "${source}" "${target}"`)
+      run(`convert -auto-orient -resize '1920x1920' -quality 75 "${source}" "${target}"`)
     }
     catch(e) {
       try {
@@ -95,32 +101,32 @@ export function processImage(imagefile, options) {
         convertJpegAndOptimize(source, target)
       }
       catch(e) {
-        console.error('Failed: ' + (e.cmd||e))
+        console.error('Failed: ', (e.cmd ?? e))
         return false
       }
     }
     DEBUG(`"${target}" created.`)
   }
 
-  // magick convert -auto-orient -resize '256x256' -quality 60 ./sources/img/africa/hornbills_nest.jpg ./img/africa/hornbills_nest.thumb.jpg
+  // (magick) convert -auto-orient -resize '256x256' -quality 60 ./sources/img/africa/hornbills_nest.jpg ./img/africa/hornbills_nest.thumb.jpg
   if (!fs.existsSync(thumbnail) || overwrite) {
     try {
-      run(`magick convert -strip -resize '256x256' -quality 60 "${target}" "${thumbnail}"`)
+      run(`convert -strip -resize '256x256' -quality 60 "${target}" "${thumbnail}"`)
     }
     catch(e) {
-      console.error('Failed: ' + e.cmd)
+      console.error('Failed: ', (e.cmd ?? e))
       return false
     }
     DEBUG(`"${thumbnail}" created.`)
   }
 
-  // magick convert -auto-orient -resize '720x720' -quality 60 ./sources/img/africa/hornbills_nest.jpg ./img/africa/hornbills_nest.small.jpg
+  // (magick) convert -auto-orient -resize '720x720' -quality 60 ./sources/img/africa/hornbills_nest.jpg ./img/africa/hornbills_nest.small.jpg
   if (fullwidth && (!fs.existsSync(smallsize) || overwrite)) {
     try {
-      run(`magick convert -resize '720x720' -quality 60 "${target}" "${smallsize}"`)
+      run(`convert -resize '720x720' -quality 60 "${target}" "${smallsize}"`)
     }
     catch(e) {
-      console.error('Failed: ' + e.cmd)
+      console.error('Failed: ', (e.cmd ?? e))
       return false
     }
     DEBUG(`"${smallsize}" created.`)
@@ -128,6 +134,39 @@ export function processImage(imagefile, options) {
 
   return {
     source, target, thumbnail, smallsize
+  }
+}
+
+export function processVideo(sourcefile, options) {
+  const source = path.join(__dirname, '../sources/img', sourcefile)
+       ,target = path.join(__dirname, '../img', sourcefile).replace('.edited','')
+       ,poster = replaceExtension(target, '.poster.jpg')
+
+  // Options
+  const { overwrite, fallbackgif } = (options || {})
+
+  // ffmpeg -i lobatse_rainstorm.gifv -vcodec libvpx -b:v 2M -an -auto-alt-ref 0 -f webm output.gifv
+  if (!fs.existsSync(poster) || overwrite) {
+    // Make sure target dir exists
+    fs.ensureDirSync(dirname(target))
+
+    // Create poster
+    try {
+      run(`ffmpeg -y -ss 1 -i ${source} -vframes 1 -q:v 5 ${poster}`);
+    }
+    catch(e) {
+      console.error('Failed: ', e)
+      return false
+    }
+    DEBUG(`"${target}" created.`)
+  }
+
+  // Copy video file to target location
+  // TODO: transcoding?
+  fs.copyFileSync(source, target)
+
+  return {
+    source, target, poster, size: '9 MB'
   }
 }
 
@@ -146,7 +185,7 @@ function convertJpegAndOptimize(source, target, options) {
 // broken in various ways
 //    `exiv2 extract '${path.dirname(target)}' --suffix .preview.exv '${source}'`,
 //    `exiv2 --insert e --location '${path.dirname(target)}' '${target}'`,
-    `magick mogrify -auto-orient -resize '${size||"1920x1920"}' -quality ${quality||75} '${target}'`,
+    `mogrify -auto-orient -resize '${size||"1920x1920"}' -quality ${quality||75} '${target}'`,
     `jpegtran -optimize -copy all -progressive -outfile '${target}' '${target}'`,
 //    `rm '${replaceExtension(target, '.exv')}'`
   ]

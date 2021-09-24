@@ -24,7 +24,7 @@ const R = (...components) => path.join(__dirname, '../', ...components)
 
 import { LANGUAGES, DEFAULT_LANGUAGE } from './languages.js'
 
-const OUTPUT_DIR = '_site'
+const OUTPUT_DIR = process.env['OUTPUT_DIR'] ?? '_site'
 
 
 
