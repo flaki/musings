@@ -1,10 +1,8 @@
 import { execSync } from 'child_process'
-import path from 'path'
 import fs from 'fs-extra'
-
-import { dirname } from 'path'
+import { dirname, join, parse as parsePath, format as formatPath } from 'path'
 import { fileURLToPath } from 'url'
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const __dirname = dirname(dirname(fileURLToPath(import.meta.url)))
 
 
 
@@ -13,9 +11,9 @@ import { DEBUG } from './util/debug.js'
 
 
 export function processPanorama(sourcefile, ) {
-  const source = path.join(__dirname, '../sources/img', sourcefile)
-       ,target = path.join(__dirname, '../img', sourcefile.replace('PANO@','')).replace('.edited','')
-       ,storedpreview = replaceExtension(source, '.pano.jpg')
+  const source = join(__dirname, './sources/img', sourcefile)
+       ,target = join(__dirname, './img', sourcefile.replace('PANO@','')).replace('.edited','')
+       ,storedpreview = replaceExtension(target, '.pano.jpg')
        ,targetpreview = replaceExtension(target, '.pano.jpg')
 
   // Preview (small-size panning animation) already exists, just copy it over
@@ -46,8 +44,8 @@ export function processPanorama(sourcefile, ) {
 }
 
 export function processGif(sourcefile, options) {
-  const source = path.join(__dirname, '../sources/img', sourcefile)
-       ,target = path.join(__dirname, '../img', gifv(sourcefile)).replace('.edited','')
+  const source = join(__dirname, './sources/img', sourcefile)
+       ,target = join(__dirname, './img', gifv(sourcefile)).replace('.edited','')
 
   // Options
   const { overwrite, fallbackgif } = (options || {})
@@ -73,22 +71,26 @@ export function processGif(sourcefile, options) {
 }
 
 export function processImage(imagefile, options) {
-  const source = path.join(__dirname, '../sources/img', imagefile)
-       ,target = path.join(__dirname, '../img', imagefile).replace('.edited','')
+  const source = join(__dirname, './sources/img', imagefile)
+       ,target = join(__dirname, './img', imagefile).replace('.edited','')
        ,thumbnail = thumb(target)
        ,smallsize = small(target)
 
+  const hasTarget = fs.existsSync(target)
+       ,hasThumb = fs.existsSync(thumbnail)
+       ,hasSmall = fs.existsSync(smallsize)
 
   // Options
   const { overwrite, fullwidth } = (options || {})
 
-  if (!fs.existsSync(source)) {
+  // Not cached and no source, report an error
+  if ((hasTarget&&hasThumb) === false && fs.existsSync(source) === false) {
     console.error(`"${source}" not found.`)
     return false
   }
 
   // (magick) convert -auto-orient -resize '1920x1920' -quality 75 ./sources/img/africa/hornbills_nest.jpg ./img/africa/hornbills_nest.jpg
-  if (!fs.existsSync(target) || overwrite) {
+  if (!hasTarget || overwrite) {
     // Make sure target dir exists
     fs.ensureDirSync(dirname(target))
 
@@ -109,7 +111,7 @@ export function processImage(imagefile, options) {
   }
 
   // (magick) convert -auto-orient -resize '256x256' -quality 60 ./sources/img/africa/hornbills_nest.jpg ./img/africa/hornbills_nest.thumb.jpg
-  if (!fs.existsSync(thumbnail) || overwrite) {
+  if (!hasThumb || overwrite) {
     try {
       run(`convert -strip -resize '256x256' -quality 60 "${target}" "${thumbnail}"`)
     }
@@ -121,7 +123,7 @@ export function processImage(imagefile, options) {
   }
 
   // (magick) convert -auto-orient -resize '720x720' -quality 60 ./sources/img/africa/hornbills_nest.jpg ./img/africa/hornbills_nest.small.jpg
-  if (fullwidth && (!fs.existsSync(smallsize) || overwrite)) {
+  if (fullwidth && (!hasSmall || overwrite)) {
     try {
       run(`convert -resize '720x720' -quality 75 "${target}" "${smallsize}"`)
     }
@@ -138,8 +140,8 @@ export function processImage(imagefile, options) {
 }
 
 export function processVideo(sourcefile, options) {
-  const source = path.join(__dirname, '../sources/img', sourcefile)
-       ,target = path.join(__dirname, '../img', sourcefile).replace('.edited','')
+  const source = join(__dirname, './sources/img', sourcefile)
+       ,target = join(__dirname, './img', sourcefile).replace('.edited','')
        ,poster = replaceExtension(target, '.poster.jpg')
 
   // Options
@@ -200,7 +202,7 @@ function convertJpegAndOptimize(source, target, options) {
 }
 
 function replaceExtension(source, newExt) {
-  let p = path.parse(source)
+  let p = parsePath(source)
 
   // Name and ext are ignored if this property exists
   delete p.base
@@ -208,7 +210,7 @@ function replaceExtension(source, newExt) {
   // Replace extension part and return re-assembled path
   p.ext = newExt
 
-  return path.format(p)
+  return formatPath(p)
 }
 function gifv(path) {
   return replaceExtension(path, '.gifv')
