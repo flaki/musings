@@ -32,8 +32,10 @@ export default function(md, options, props) {
   // Image pre-processing
   // image(string href, string title, string text)
   renderer.image = (...args) => {
+    let [ href, title, text, kind ] = args;
+  
     // If image is pointing to "sources" directory, pre-process it
-    const m = args[0].match(/^\/sources\/img\/(|[\w\/]+?\/)(|PANO@)([\w\.-]+?)\.(jpg|gif|gifv|mp4)$/i)
+    const m = href.match(/^\/sources\/img\/(|[\w\/]+?\/)(|PANO@)([\w\.-]+?)\.(jpg|gif|gifv|mp4)$/i)
     if (m) {
       const [ , path, prefix, name, extension ] = m,
         filename = path + prefix + name + '.' + extension
@@ -43,23 +45,29 @@ export default function(md, options, props) {
 
         const res = processPanorama(filename)
         if (res) {
-          args[0] = res.targetpreview.substring(res.targetpreview.indexOf('/img/'))
+          href = res.targetpreview.substring(res.targetpreview.indexOf('/img/'))
         }
 
-        return rImage.apply(renderer, args).replace('<img','<img class="panorama"')
+        return rImage.apply(renderer, [href,title,text]).replace('<img','<img class="panorama"')
       }
 
       // Preprocess JPEGs
       if (extension == 'jpg') {
         DEBUG(`Preprocessing as image: ${filename}`)
 
-        const res = processImage(`${filename}`)
+        const res = processImage(`${filename}`, { fullwidth: kind })
 
         // If successfully generated derived image files, use thumbnail
         // in source.
         // TODO: currently full-size image is only exposed via JS
         if (res) {
-          args[0] = res.thumbnail.substring(res.thumbnail.indexOf('/img/'))
+          // If standalone image, use smallsize
+          if (kind == 'standalone') {
+            href = res.smallsize.substring(res.smallsize.indexOf('/img/'))
+          // Otherwise use the thumbnail size {
+          } else {
+            href = res.thumbnail.substring(res.thumbnail.indexOf('/img/'))
+          }
         }
 
       // Preprocess GIFs, convert to looped/muted autoplay video embeds
@@ -75,7 +83,7 @@ export default function(md, options, props) {
           let fallback = ''
           if (res.fallback) {
             let fallbackurl = res.fallback.substring(res.fallback.indexOf('/img/'))
-            fallback = `<p>Video is not supported, <a href="${fallbackurl}">click here</a> for a fallback GIF for "${args[2]}" (size: ? MB)</p>`
+            fallback = `<p>Video is not supported, <a href="${fallbackurl}">click here</a> for a fallback GIF for "${text}" (size: ? MB)</p>`
           }
 
           return `<video autoplay muted loop><source src="${result}" type="video/mp4">${fallback}</video>`
@@ -84,11 +92,8 @@ export default function(md, options, props) {
       // Copy over videos & return embed code
       // TODO: preprocess
       } else if (extension == 'mp4') {
-        let [ src, title, alt ] = args;
-        if (!title) title = alt;
-
         DEBUG(`Preprocessing as video: ${filename}`)
-        const { source, target, poster, size } = processVideo(filename)
+        const { target, poster, size } = processVideo(filename)
         
         return `<p>
 <figure data-src="${filename}">
@@ -97,18 +102,18 @@ export default function(md, options, props) {
     <em>Video is not supported in your browser,
       <a download href="${imgur(target)}">click here</a>
       to download the video of
-      "${alt}"
+      "${text}"
       (${size})
     </em>
   </video>
-  <figcaption>${title} (${size})</figcaption>
+  <figcaption>${title ?? text} (${size})</figcaption>
 </figure>
 </p>`
 
       }
     }
 
-    return rImage.apply(renderer, args)
+    return rImage.apply(renderer, [href,title,text])
   }
 
   // Content fixes
@@ -128,6 +133,26 @@ export default function(md, options, props) {
   }
 
   // Run marked
+  const walkParagraphs = (token) => {
+    if (token.type === 'paragraph') {
+      if (token.tokens[0]?.type === 'image' && token.tokens.length === 1) {
+        token.type="standaloneimage"
+        token.tokens[0]._standalone=true
+      }
+    }
+  }
+
+  const standaloneImage = {
+    name: 'standaloneimage',
+    level: 'block',
+    renderer(t) {
+      const { href, title, text } = t.tokens[0]
+      return `<figure class="standalone-image">${renderer.image(href, title, text, 'standalone')}</figure>`
+    }
+  }
+
+  marked.use({ walkTokens: walkParagraphs })
+  marked.use({ extensions: [ standaloneImage ] })
   let html = marked(md, Object.assign({}, options, { renderer: renderer }))
 
   // TODO: move these hacks out into the lexer/tokenizer step
