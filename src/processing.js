@@ -152,7 +152,7 @@ export function processVideo(sourcefile, options) {
 
     // Create poster
     try {
-      run(`ffmpeg -y -ss 1 -i ${source} -vframes 1 -q:v 5 ${poster}`);
+      run(`ffmpeg -y -ss 1 -i ${source} -vframes 1 -q:v 5 ${poster}`)
     }
     catch(e) {
       console.error('Failed: ', e)
@@ -163,10 +163,13 @@ export function processVideo(sourcefile, options) {
 
   // Copy video file to target location
   // TODO: transcoding?
-  fs.copyFileSync(source, target)
-
+  if (!fs.existsSync(target) || overwrite) {
+    fs.copyFileSync(source, target)
+  }
+  const stat = fs.statSync(target);
+  const size = (stat.size / 1024 / 1024).toFixed(1)+' MB';
   return {
-    source, target, poster, size: '9 MB'
+    source, target, poster, size
   }
 }
 
