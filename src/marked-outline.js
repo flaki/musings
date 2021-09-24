@@ -45,7 +45,7 @@ export default function(md, options, props) {
 
         const res = processPanorama(filename)
         if (res) {
-          href = res.targetpreview.substring(res.targetpreview.indexOf('/img/'))
+          href = imgur(res.targetpreview)
         }
 
         return rImage.apply(renderer, [href,title,text]).replace('<img','<img class="panorama"')
