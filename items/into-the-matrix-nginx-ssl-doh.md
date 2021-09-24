@@ -33,7 +33,7 @@ Not me, though, and it took me a while to realize that was because of DoH. DNS-o
 
 Oh that's not all: through HSTS—Strict Transport Security—a site may ask the browser *never* to let you access the site via insecure connection. And self-signed certificates are exactly those. HSTS means well, it really does, but if you forget to clear `matrix.to`'s site data before you make the switch, you will be greeted with a similar unwaveringly stoic message:
 
-![Firefox informs me that HSTS in affect, and thus I can't add a ](/img/firefox-hsts.jpg)
+![Firefox informs me on the security screen that HSTS in affect, and thus I can't add an exception for this certificate mismatch](/img/firefox-hsts.jpg)
 
 Of course one could choose to simply add a new trusted CA to their browser's certificate store... okay let's not make this blogpost a complete security-anti-pattern galore, let's talk a bit about client-side JavaScript for a change.
 
