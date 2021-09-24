@@ -14,7 +14,7 @@ import { DEBUG } from './util/debug.js'
 
 export function processPanorama(sourcefile, ) {
   const source = path.join(__dirname, '../sources/img', sourcefile)
-       ,target = path.join(__dirname, '../img', sourcefile).replace('.edited','')
+       ,target = path.join(__dirname, '../img', sourcefile.replace('PANO@','')).replace('.edited','')
        ,storedpreview = replaceExtension(source, '.pano.jpg')
        ,targetpreview = replaceExtension(target, '.pano.jpg')
 
@@ -123,7 +123,7 @@ export function processImage(imagefile, options) {
   // (magick) convert -auto-orient -resize '720x720' -quality 60 ./sources/img/africa/hornbills_nest.jpg ./img/africa/hornbills_nest.small.jpg
   if (fullwidth && (!fs.existsSync(smallsize) || overwrite)) {
     try {
-      run(`convert -resize '720x720' -quality 60 "${target}" "${smallsize}"`)
+      run(`convert -resize '720x720' -quality 75 "${target}" "${smallsize}"`)
     }
     catch(e) {
       console.error('Failed: ', (e.cmd ?? e))
