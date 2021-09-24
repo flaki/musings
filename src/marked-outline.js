@@ -147,7 +147,9 @@ export default function(md, options, props) {
     level: 'block',
     renderer(t) {
       const { href, title, text } = t.tokens[0]
-      return `<figure class="standalone-image">${renderer.image(href, title, text, 'standalone')}</figure>`
+      return `<figure class="standalone-image">${
+          renderer.image(href, title, text, 'standalone')
+        }<figcaption>${title ?? text}</figcaption></figure>`
     }
   }
 
