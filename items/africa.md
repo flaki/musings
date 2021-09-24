@@ -43,7 +43,7 @@ If we wouldn't have been aware that we were in Africa proper, the monkeys chasin
 
 It did not take us long to learn what _"wet season"_ meant in Botswana, as soon as we set out it started raining like there was no tomorrow -- we didn't know back then these rainstorms would accompany us for the days to come.
 
-![Rainstorms raging on our way to Lobatse](/sources/img/africa/lobatse_rainstorm.gifv)
+![Rainstorms raging on our way to Lobatse](/sources/img/africa/anim/lobatse_rainstorm.gifv)
 
 After arriving we have washed off the dust of the road with some real Botswana lager and had a nice dinner together. As a personal favorite I frequently take Tokaji Aszú (a sweet white desert wine from the Eastern region of Hungary) so I picked up an "5 puttonyos Tokaji Aszú (2008)" of the Disznókő winery while in Debrecen (after about 6000 miles, that's a well-traveled wine i can tell you!). We drank some of the bottle after diner and Sibylle put the rest aside for later in our Kalahari trip.
 
@@ -60,7 +60,7 @@ The next morning my watch informed me that I "got some killer Zzz-s" and I've sl
 
 ## Day 1: Into the Wilderness!
 
-![Weaverbirds at work](/sources/img/africa/weaverbirds.edited.gifv)
+![Weaverbirds at work](/sources/img/africa/anim/weaverbirds.edited.gifv)
 
 After a warm shower the next morning (we suspected this would be the last one for a while -- but frankly, we were not prepared) we got to have a closer look at the mansion. The semi-open indoor swimming pool and sauna we saw the night before but the balcony's view and the weaverbirds nesting on the other side of the living room window gave the place an even nicer flair.
 
@@ -78,7 +78,7 @@ Florian had warned me, that in the Kalahari we won't have any kind of reception,
 ### Setting sail
 We have left Lobatse somewhere around noon, armed with every possible thing we would need to survive for days in the desert -- except for two things. Fuel and water.
 
-![Twenty liters of water per person (5 liters per day), that's a LOT of water...](/sources/img/africa/water_stockpile.gifv)
+![Twenty liters of water per person (5 liters per day), that's a LOT of water...](/sources/img/africa/anim/water_stockpile.gifv)
 
 We drove from Lobatse to Molepolole where we filled the LandCruiser to the rim (and also some jerry cans) with almost 200 liters of diesel fuel, and then visited the local supermarket to further stockpile on industrial amounts of water: 5 liters per person per day ends up being quite a massive stash of water.
 
@@ -86,7 +86,7 @@ We drove from Lobatse to Molepolole where we filled the LandCruiser to the rim (
 
 This Superspar looks like a Spar, it quacks like a Spar, so you kinda' get the feeling it _is_ actually a Spar... and then the power goes bye-bye and the next thing you see is people roaming the shop with flashlights, getting that last piece of grocery or diapers in the pitch-black twilight of the giant supermarket.
 
-![Power outage in Superspar Molepolole](/sources/img/africa/superspar_twilight.gifv)
+![Power outage in Superspar Molepolole](/sources/img/africa/anim/superspar_twilight.gifv)
 
 Halfway through shopping the a power outage struck and the entire giant shopping complex went dark. People (including me) would continue shopping, as long as the generators would supply enough power to operate the cashiers' machines, with a guard standing in the entrance, checking whether all the exiting customers have _actually_ paid for the produce in their trolleys.
 
@@ -95,7 +95,7 @@ Halfway through shopping the a power outage struck and the entire giant shopping
 
 We set out to cross the Kalahari from south to north. Most of the central Kalahari is a nature reserve, the Central Kalahari Game reserve, the south tip is a separate reserve, the Khutse Game Reserve, this was our entry point to the wilderness.
 
-![Arriving at the Khutse Game Reserve](/sources/img/africa/khutse.gif)
+![Arriving at the Khutse Game Reserve](/sources/img/africa/anim/khutse.gifv)
 
 We haven't spent much time in Khutse, our night camp were already in the Central Kalahari reserve, so after a quick gate check and paying the park fees we were on our way... well, we were supposed to be, but the car didn't start. We learned our lesson -- the hard way -- in redundancy.
 
@@ -109,11 +109,11 @@ Sibylle told us early on into the planning that to go to the heart of the desert
 Crischa is a budding hunter (although, he'd mostly just affectionately refer to himself as _"a pig farmer with a giant industrial mincer"_), and in the days that followed his wit & skills have ended up saving our butt numerous times in the middle of the wilderness. We have also learned a ton, some of these learnings I'll try to share further below.
 
 
-### Four days in the desert — in a broken car
+### Four days in the desert -- in a broken car
 
 Crischa disconnected the cable from what seemed to be a faulty secondary system, but the car still wouldn't start.
 
-![Crischa inspecting the engine of our car](/sources/img/africa/khutse_enginefix.gifv)
+![Crischa inspecting the engine of our car](/sources/img/africa/anim/khutse_enginefix.gifv)
 
 It is highly suspected that the separately installed secondary battery system caused the engine trouble, but we never actually learned what exactly happened. Seemingly the troublesome secondary circuit has completely drained & killed the main battery, so we needed to jump-start the car from Crischa's LandCruiser. This dance would become a frequent occurrence in the following days, but we decided that this little inconvenience shouldn't spoil our quest. Nevertheless, our desert survival trip was not off to a promising start...
 
@@ -130,11 +130,9 @@ After this short intermezzo, we were finally **in**! A few minutes into Khutse w
 
 We haven't spent too much time enjoying Khutse's hospitality, but even with that -- the several hundreds of kilometers of a drive from Lobatse and the time spent (wasted?) on stockpiling and at the park gates -- it was already past 6PM as we arrived to our campsite, at the edge of the Central Kalahari Game Reserve.
 
-<!-- ![Khawakhwe still life](/sources/img/africa/khawakhwe_nights.edited.mp4) -->
-<p><video controls poster="/img/africa/khawakhwe_nights.preview.jpg">
-  <source src="/img/africa/khawakhwe_nights.mp4" type="video/mp4">
-  <em>Video is not supported in your browser, <a download href="/img/africa/khawakhwe_nights.mp4">click here</a> to download the video of "Khawakhwe still life" (size: 4.7 MB)</em>
-</video></p>
+
+![Khawakhwe still life](/sources/img/africa/v/khawakhwe_nights.edited.mp4)
+
 
 Most south-African countries are 1 hour ahead of Central European time in the winter months -- 6PM here is already dusk, with at 8PM being already pitch-black (due to the cloudy skies and lack of light pollution in the desert). This campsite was one of the better ones: equipped with a (bucket-)shower and latrine ("toilet"), and a designated fireplace. We needed to pitch our tents & get the campfire running quick. Fumbling in the dark outside the camp, searching for firewood was strongly discouraged, especially in the late hours.
 
@@ -166,11 +164,11 @@ Our breakfast then was cut short by another shower rolling in, so we hastily pac
     language: en
     updated: 2019-01-11
 
-### Peekaboo — some heads pokin' out!
+### Peekaboo -- some heads pokin' out!
 
 We have barely left the camp behind we soon started seeing curious animal heads poking out form behind the roadside bushes:
 
-![Passing by some curious giraffes on our way to the depths of Central Kalahari.](/sources/img/africa/giraffes.edited.gifv)
+![Passing by some curious giraffes on our way to the depths of Central Kalahari.](/sources/img/africa/anim/giraffes.edited.gifv)
 
 Since human presence is ubiquitous in these parks (to a point where I was often joking about how these parks are amusement parks for animals to do human-watching) most animals will give you a long, inquisitive stare, as they assess how much threat you may pose to them. Needless to say this makes for excellent photo opportunities, and it is easy to lull ourselves into the belief that they are posing _just for us_. :)
 
@@ -212,15 +210,13 @@ As his initial suspicion dissipated, Sascha would earn himself the _"little monk
 
 Until this time, it has been mostly Sibylle and Florian who were driving our car, so it was time for Jan-Erik to jump behind the steering wheel and get a taste of kicking the tyres on a 4WD in the Kalahari!
 
-![Jan-Erik driving in the desert](/sources/img/africa/janerik_at_the_wheel.gifv)
+![Jan-Erik driving in the desert](/sources/img/africa/anim/janerik_at_the_wheel.gifv)
 
 As I noted then, he chose the perfect time for doing so, as he'd get to experience all the fun the desert had to offer: from spouting dust puffs as one is tearing through the deep sandy trails to peering out from behind the windshield in raging rainstorms and sledding in the post-shower mudbaths.
 
-<!-- ![Jan-Erik gets caught up in a tiny little desert drizzle](/img/africa/janerik_desert_storm.mp4) -->
-<p><video controls poster="/img/africa/janerik_desert_storm.preview.jpg">
-  <source src="/img/africa/janerik_desert_storm.mp4" type="video/mp4">
-  <em>Video is not supported in your browser, <a download href="/img/africa/janerik_desert_storm.mp4">click here</a> to download the video of "Jan-Erik gets caught up in a tiny little desert drizzle" (size: 9 MB)</p>
-</video></em>
+
+![Jan-Erik gets caught up in a tiny little desert drizzle](/sources/img/africa/v/janerik_desert_storm.edited.mp4)
+
 
 Even discounting the frequent showers of the wet season, the Kalahari was nothing like what Hollywood's depictions of deserts (with their looming infinite sandy dunes) might have set you up for. Both the flora and the fauna was rich, with scurrying insects, chirpy birds and varying degrees of vegetation all around -- the view never got boring for even a second.
 
@@ -248,7 +244,7 @@ This really got me thinking about how useless all the technology packed into our
 
 After eventually finding the campsite, overlooking the waterhole, we could already see another storm rolling in. This meant nice sunset pictures -- but also a priority to get the campfire going.
 
-![Blazing campfire](/sources/img/africa/campfire.gifv)
+![Blazing campfire](/sources/img/africa/anim/campfire.gifv)
 
 With the unending parade of rainstorms, the campfire has become our number one desert home furnishing, and with the frequent storms and hungry cats around, one of the first things erected once we settled down for a new campsite. Another such home improvement staple would become the makeshift rain shelter/tent we would bring up every night from now on to be able to stick it out against the raging elements until dinner was ready. That said, even keeping the fire alive throughout the evening storm long enough to have Crischa's special, house-made sausages grilled to perfection had become a challenge on its own.
 
