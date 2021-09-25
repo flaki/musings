@@ -13,11 +13,12 @@
   },
   "devDependencies": {
     "dialog-polyfill": "^0.4.10",
+    "node-static": "^0.7.11",
     "servor": "^4.0.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "servor --static _site",
+    "start": "static _site -a 0.0.0.0 -p 8000",
     "build": "node build.js",
     "build-debug": "DEBUG=1 node build.js",
     "deploy": "OUTPUT_DIR=./_deploy/live node build.js",

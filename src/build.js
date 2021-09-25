@@ -30,19 +30,23 @@ const OUTPUT_DIR = process.env['OUTPUT_DIR'] ?? '_site'
 
 
 // Create/clean output directory
-DEBUG('Truncating output folder...')
-
+DEBUG('Creating output folder...')
 fs.ensureDirSync(R(OUTPUT_DIR))
-//fs.emptyDirSync(R(OUTPUT_DIR))
+fs.emptyDirSync(R(OUTPUT_DIR))
 
 
 // Symlinks to static assets
-DEBUG('Symlinking assets directories...')
+DEBUG('Copying assets...')
 
-//fs.ensureSymlinkSync('../img', R(OUTPUT_DIR+'/img'), 'dir')
-//fs.ensureSymlinkSync('../assets', R(OUTPUT_DIR+'/assets'), 'dir')
-fs.copy(path.join(__dirname, '../img'), R(OUTPUT_DIR+'/img'))
-fs.copy(path.join(__dirname, '../assets'), R(OUTPUT_DIR+'/assets'))
+try {
+  fs.ensureDirSync(path.join(__dirname, '../img'))
+
+  fs.copySync(path.join(__dirname, '../img'), R(OUTPUT_DIR+'/img'))
+  fs.copySync(path.join(__dirname, '../assets'), R(OUTPUT_DIR+'/assets'))
+}
+catch(e) {
+  DEBUG('Copy errors: ', e.message)
+}
 
 
 // Read posts
@@ -80,7 +84,7 @@ const livePosts = posts.filter(
 // Generate index page
 DEBUG('Generating documents...')
 import { templates as indexTemplates } from './indexPage.js'
-import { templates as postTemplates } from './postPage.js'
+import { tPost } from './postPage.js'
 
 import tPageMeta from './tPageMeta.js'
 
@@ -104,9 +108,14 @@ LANGUAGES.forEach(language => {
     const { parsed, props } = p.versions[language]
     const social = props.social_image
 
+    const contents = tPost({
+      ...p,
+      contents: parsed.html
+    })
+
     const page = Object.assign({
       language,
-      contents: parsed.html,
+      contents,
 
       title: [ parsed.title||p.title, siteConfig.sitename ].join(' \u2014 '),
       description: parsed.description || p.description,

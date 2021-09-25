@@ -3,10 +3,25 @@ import { html } from './minihtml.js'
 const LOCAL_DATE_FORMAT = { month: 'long', year: 'numeric', day: 'numeric' }
 
 
-const tPost = (post) => html`<div>
-  ${post.contents}
-  <p><time datetime="${new Date(post.date).toISOString()}">${new Date(post.date).toLocaleDateString(post.language, LOCAL_DATE_FORMAT)}</time></p>
+export const tPost = (post) => html`
+<h1 id="${post.label}" class="p-name">${post.title}</h1>
+
+<blockquote class="p-description">${post.description}</blockquote>
+
+<p class="impressum">
+  published:
+  <time class="dt-published" datetime="${post.published.toISOString()}">${
+    post.published.toLocaleDateString(post.language, LOCAL_DATE_FORMAT)
+  }</time>${
+    post.updated ? ', last updated: ' : ''
+  }<time class="dt-updated" datetime="${post.updated?.toISOString()}">${
+    post.updated?.toLocaleDateString(post.language, LOCAL_DATE_FORMAT) ?? ''
+  }</time>
+</p>
+
+<div class="e-content">
+  ${[ post.contents ]}
 </div>
 `
 
-export const templates = { tPost }
+export default { tPost }
