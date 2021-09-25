@@ -26,6 +26,9 @@ export default function(md, options, props) {
       args[2] = args[2].normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     }
 
+    // Skip rendering H1 (rendered separately in-template)
+    if (level === 1) return '';
+
     return rHeading.apply(renderer, args)
   }
 
@@ -83,7 +86,7 @@ export default function(md, options, props) {
           let fallback = ''
           if (res.fallback) {
             let fallbackurl = res.fallback.substring(res.fallback.indexOf('/img/'))
-            fallback = `<p>Video is not supported, <a href="${fallbackurl}">click here</a> for a fallback GIF for "${text}" (size: ? MB)</p>`
+            fallback = `<span>Video is not supported, <a href="${fallbackurl}">click here</a> for a fallback GIF for "${text}" (size: ? MB)</span>`
           }
 
           return `<video autoplay muted loop><source src="${result}" type="video/mp4">${fallback}</video>`
@@ -95,7 +98,7 @@ export default function(md, options, props) {
         DEBUG(`Preprocessing as video: ${filename}`)
         const { target, poster, size } = processVideo(filename)
         
-        return `<p>
+        return `
 <figure data-src="${filename}">
   <video controls poster="${imgur(poster)}">
     <source src="${imgur(target)}" type="video/mp4">
@@ -106,9 +109,9 @@ export default function(md, options, props) {
       (${size})
     </em>
   </video>
-  <figcaption>${title ?? text} (${size})</figcaption>
+  <figcaption>${renderer.text(title ?? text)} (${size})</figcaption>
 </figure>
-</p>`
+`
 
       }
     }
@@ -133,11 +136,31 @@ export default function(md, options, props) {
   }
 
   // Run marked
-  const walkParagraphs = (token) => {
+  const walkTokens = (token) => {
     if (token.type === 'paragraph') {
+      // Only one child token and it's an image
       if (token.tokens[0]?.type === 'image' && token.tokens.length === 1) {
-        token.type="standaloneimage"
-        token.tokens[0]._standalone=true
+        const img = token.tokens[0]
+        const { href } = img
+
+        // Check file extension to exclude videos
+        if (href.endsWith('.jpg') || href.endsWith('.png') || href.endsWith('.gif')) {
+          token.type="standaloneimage"
+          img._standalone=true
+        }
+      }
+    }
+    if (token.type === 'list') {
+      // At this level the token type will always be text
+      const itemTok = token.items.flatMap(i => i.tokens)
+      // At this level, we check if the content is a single image
+      // for all items -- this means it's an image gallery
+      const itemContentTok = itemTok.flatMap(t => t.tokens).map(t => t.type)
+
+      // If every item is an 'image' type, we make this a custom image gallery element
+      if (itemContentTok.every(i => i === 'image')) {
+        token.type = "imagegallery"
+        token.imgcount = itemContentTok.length;
       }
     }
   }
@@ -147,14 +170,31 @@ export default function(md, options, props) {
     level: 'block',
     renderer(t) {
       const { href, title, text } = t.tokens[0]
-      return `<figure class="standalone-image">${
+
+      // Panorama images get a different class
+      const label = href.includes('PANO@') ? 'panorama-image' : 'standalone-image'
+      console.log(href, label);
+
+      return `<figure class="${label}">${
           renderer.image(href, title, text, 'standalone')
-        }<figcaption>${title ?? text}</figcaption></figure>`
+        }<figcaption>${renderer.text(title ?? text)}</figcaption></figure>`
     }
   }
 
-  marked.use({ walkTokens: walkParagraphs })
-  marked.use({ extensions: [ standaloneImage ] })
+  const imageGallery = {
+    name: 'imagegallery',
+    level: 'block',
+    renderer(t) {
+      t.type='list'
+      return this.parser.parse([t]).replace(
+        '<ul',
+        `<ul class="image-gallery size-${t.imgcount}"`
+      )
+    }
+  }
+
+  marked.use({ walkTokens })
+  marked.use({ extensions: [ standaloneImage, imageGallery ] })
   let html = marked(md, Object.assign({}, options, { renderer: renderer }))
 
   // TODO: move these hacks out into the lexer/tokenizer step

@@ -84,22 +84,28 @@ dialog.gallery.zoomedin label {
 
 /* Gallery image thumbnails */
 /* Unordered lists of images are shown as a small image thumbnail gallery */
-article > ul {
+.image-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(6rem, max-content));
   grid-gap: .5rem;
   justify-content: center;
+  align-items: center;
+
 
   list-style-type: none;
   margin: 1em 0;
   padding: 0;
 }
 
-article > ul>li {
+.image-gallery.size-4 {
+  grid-template-columns: auto auto;
+}
+
+.image-gallery>li {
   display: contents;
 }
 
-article > ul img {
+.image-gallery img {
   object-fit: cover;
   max-width: 100%;
   max-height: 12rem;
@@ -110,7 +116,31 @@ article > ul img {
   transition: .4s ease all;
 }
 
-article > ul img:hover {
+.image-gallery.size-4 img {
+  max-height: 30vh;
+}
+.image-gallery.size-2 img {
+  max-height: 50vw;
+}
+
+.image-gallery.size-4 li:nth-child(odd) img,
+.image-gallery.size-2 li:nth-child(odd) img {
+  justify-self: end;
+}
+.image-gallery.size-4 li:nth-child(even) img,
+.image-gallery.size-2 li:nth-child(even) img {
+  justify-self: start;
+}
+
+@media screen and (max-width: 480px) {
+  .image-gallery.size-3 li:last-child img {
+    grid-column: 1/3;
+    justify-self: center;
+  }
+}
+
+
+.image-gallery img:hover {
   cursor: pointer;
   border: .1rem solid black;
 }
