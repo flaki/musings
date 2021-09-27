@@ -29,11 +29,11 @@ const BUILD_ENV = process.env['BUILD_ENV'] ?? 'live'
 
 // Output directory
 const OUTPUT_DIR = process.env['OUTPUT_DIR'] ?? '_site'
-const OUTDIR = !OUTPUT_DIR || path.isAbsolute(OUTPUT_DIR) ? OUTPUT_DIR : R(OUTPUT_DIR)
+const OUTDIR = OUTPUT_DIR === '_site' || path.isAbsolute(OUTPUT_DIR) === false ? R(OUTPUT_DIR) : OUTPUT_DIR
 
 
 // Create/clean output directory
-DEBUG('Creating output folder...')
+DEBUG('Creating output folder: ', OUTPUT_DIR)
 fs.ensureDirSync(OUTDIR)
 fs.emptyDirSync(OUTDIR)
 
