@@ -31,21 +31,24 @@ const BUILD_ENV = process.env['BUILD_ENV'] ?? 'live'
 const OUTPUT_DIR = process.env['OUTPUT_DIR'] ?? '_site'
 const OUTDIR = OUTPUT_DIR === '_site' || path.isAbsolute(OUTPUT_DIR) === false ? R(OUTPUT_DIR) : OUTPUT_DIR
 
+const OUT = (...components) => path.join(OUTDIR, ...components)
+
 
 // Create/clean output directory
 DEBUG('Creating output folder: ', OUTPUT_DIR)
-fs.ensureDirSync(OUTDIR)
-fs.emptyDirSync(OUTDIR)
+fs.ensureDirSync(OUT())
+fs.emptyDirSync(OUT())
 
 
 // Symlinks to static assets
 DEBUG('Copying assets...')
 
 try {
-  fs.ensureDirSync(path.join(__dirname, '../img'))
-
-  fs.copySync(path.join(__dirname, '../img'), path.join(OUTDIR,'/img'))
-  fs.copySync(path.join(__dirname, '../assets'), path.join(OUTDIR,'/assets'))
+  // Copy images and assets
+  for (const p of ['img', 'assets']) {
+    fs.ensureDirSync( R(p) )
+    fs.copySync(      R(p), OUT(p) )
+  }
 }
 catch(e) {
   DEBUG('Copy errors: ', e.message)
@@ -54,6 +57,8 @@ catch(e) {
 
 // Read posts
 DEBUG('Enumerating posts...')
+
+fs.ensureDirSync( R('items') )
 
 const posts = walk(R('items'),
   { filter: p => path.extname(p.path) === '.md' }
@@ -96,10 +101,10 @@ const pageTemplate = fs.readFileSync(R('src/post.html')).toString()
 // Generate index page listing
 LANGUAGES.forEach(language => {
   const postsInLang = postsFor(language)
-  const siteroot = OUTPUT_DIR+'/' + (language == DEFAULT_LANGUAGE ? '' : language+'/')
+  const SITEROOT = language == DEFAULT_LANGUAGE ? '' : language
 
-  fs.ensureDirSync(R(siteroot))
-  fs.writeFileSync(R(siteroot, 'index.html'), postsInLang.htmlList)
+  fs.ensureDirSync(OUT(SITEROOT))
+  fs.writeFileSync(OUT(SITEROOT, 'index.html'), postsInLang.htmlList)
 
   DEBUG(` - index for "${language}" locale: ${postsInLang.items.length} documents`)
 
@@ -121,10 +126,10 @@ LANGUAGES.forEach(language => {
       title: [ parsed.title||p.title, siteConfig.sitename ].join(' \u2014 '),
       description: parsed.description || p.description,
 
-      socialImage: social ? (social.includes('/') ? social : siteConfig.siteroot+'/img/social/'+social) : '',
+      socialImage: social ? (social.includes('/') ? social : new URL('/img/social/'+social, siteConfig.siteroot)) : '',
 
       url: p.url,
-      fullUrl: siteConfig.siteroot+p.url,
+      fullUrl: new URL(p.url, siteConfig.siteroot),
 
       metadata: props,
     })
@@ -146,14 +151,14 @@ LANGUAGES.forEach(language => {
       }
     ))
 
-    const fpath = R(siteroot,p.label)
+    const fpath = OUT(SITEROOT, p.label)
     fs.ensureDirSync(fpath)
     fs.writeFileSync(fpath+'/index.html', html)
 
     DEBUG(`   * ${p.filename}: ${p.title}`)
   })
 
-  fs.writeFileSync(R(siteroot, '/feed.xml'), rss(siteConfig, rssItems))
+  fs.writeFileSync(OUT(SITEROOT, '/feed.xml'), rss(siteConfig, rssItems))
 
 })
 
