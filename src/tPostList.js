@@ -12,9 +12,11 @@ export function post(post) {
 
   const updated = post.updated ? ` (${l10n_updated[post.language]}: <time datetime="${machineDate(post.updated)}">${langDate(post.updated)}</time>)` : ''
 
+  const draft = post.draft ? ` <span class="draft" title="This is a draft post">⚠️</span>` : ''
+
   // Giant quick hack to avoid double-encoding html entities in `post.title`
   return html`<li>
-    <h2><a href="${post.url}">${ { toString: _ => post.title } }</a></h2>
+    <h2><a href="${post.url}">${ { toString: _ => post.title } }</a> ${[draft]}</h2>
     <p>${post.description}</p>
     <p><time datetime="${machineDate(publication)}">${langDate(publication)}</time>${[updated]}</p>
   </li>`

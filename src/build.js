@@ -24,15 +24,18 @@ const R = (...components) => path.join(__dirname, '../', ...components)
 
 import { LANGUAGES, DEFAULT_LANGUAGE } from './languages.js'
 
+// Build environment
+const BUILD_ENV = process.env['BUILD_ENV'] ?? 'live'
+
+// Output directory
 const OUTPUT_DIR = process.env['OUTPUT_DIR'] ?? '_site'
-
-
+const OUTDIR = !OUTPUT_DIR || path.isAbsolute(OUTPUT_DIR) ? OUTPUT_DIR : R(OUTPUT_DIR)
 
 
 // Create/clean output directory
 DEBUG('Creating output folder...')
-fs.ensureDirSync(R(OUTPUT_DIR))
-fs.emptyDirSync(R(OUTPUT_DIR))
+fs.ensureDirSync(OUTDIR)
+fs.emptyDirSync(OUTDIR)
 
 
 // Symlinks to static assets
@@ -41,8 +44,8 @@ DEBUG('Copying assets...')
 try {
   fs.ensureDirSync(path.join(__dirname, '../img'))
 
-  fs.copySync(path.join(__dirname, '../img'), R(OUTPUT_DIR+'/img'))
-  fs.copySync(path.join(__dirname, '../assets'), R(OUTPUT_DIR+'/assets'))
+  fs.copySync(path.join(__dirname, '../img'), path.join(OUTDIR,'/img'))
+  fs.copySync(path.join(__dirname, '../assets'), path.join(OUTDIR,'/assets'))
 }
 catch(e) {
   DEBUG('Copy errors: ', e.message)
@@ -71,8 +74,9 @@ const posts = walk(R('items'),
 DEBUG(`${posts.length} documents, ${posts.reduce((c, post) => c+post.draft,0)} drafts`)
 
 // Process non-draft posts
-const livePosts = posts.filter(
-  p => !p.draft
+// Hide draft posts in live builds, but include everything in other builds
+const livePosts = (
+  BUILD_ENV === 'live' ? posts.filter(p => !p.draft) : posts
 ).map(
   post => Object.assign(
     post,
