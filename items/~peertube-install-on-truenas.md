@@ -289,3 +289,11 @@ curl https://pityu.flaki.hu/login --resolve pityu.flaki.hu:443:127.0.0.1
 Welcome to the Fediverse!
 
 ![https://files.todoist.com/user_upload/v2/2180121231/file.png](/img/peertube-installed.png)
+
+
+---
+
+    language: en
+    updated: 2021-07-25
+
+> Note: initially I started out with a TrueNAS-based setup on my home NAS/homeserver. Since then I have already moved on and transitioned my whole setup to Proxmox containers which fits my usecase much better and makes much better use of the hardware for my needs (I should write a blogpost about it, shouldn't I?). In any case, I decided to publish this earlier draft that I wrote as I was setting Peertube up on the TrueNAS system, it might come handy to some!
