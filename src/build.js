@@ -24,6 +24,10 @@ const R = (...components) => path.join(__dirname, '../', ...components)
 
 import { LANGUAGES, DEFAULT_LANGUAGE } from './languages.js'
 
+// Build environment
+const BUILD_ENV = process.env['BUILD_ENV'] ?? 'live'
+
+// Output directory
 const OUTPUT_DIR = process.env['OUTPUT_DIR'] ?? '_site'
 const OUTDIR = !OUTPUT_DIR || path.isAbsolute(OUTPUT_DIR) ? OUTPUT_DIR : R(OUTPUT_DIR)
 
@@ -70,8 +74,9 @@ const posts = walk(R('items'),
 DEBUG(`${posts.length} documents, ${posts.reduce((c, post) => c+post.draft,0)} drafts`)
 
 // Process non-draft posts
-const livePosts = posts.filter(
-  p => !p.draft
+// Hide draft posts in live builds, but include everything in other builds
+const livePosts = (
+  BUILD_ENV === 'live' ? posts.filter(p => !p.draft) : posts
 ).map(
   post => Object.assign(
     post,
