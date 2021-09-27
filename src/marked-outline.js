@@ -173,7 +173,6 @@ export default function(md, options, props) {
 
       // Panorama images get a different class
       const label = href.includes('PANO@') ? 'panorama-image' : 'standalone-image'
-      console.log(href, label);
 
       return `<figure class="${label}">${
           renderer.image(href, title, text, 'standalone')
