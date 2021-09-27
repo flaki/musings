@@ -78,10 +78,7 @@ DEBUG(`${posts.length} documents, ${posts.reduce((c, post) => c+post.draft,0)} d
 const livePosts = (
   BUILD_ENV === 'live' ? posts.filter(p => !p.draft) : posts
 ).map(
-  post => Object.assign(
-    post,
-    { versions: parse(post) }
-  )
+  post => ({ ...post, versions: parse(post) })
 )
 
 
