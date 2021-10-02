@@ -139,6 +139,24 @@ export function processImage(imagefile, options) {
   }
 }
 
+export function processPng(sourcefile, options) {
+  const source = join(__dirname, './sources/img', sourcefile)
+       ,target = join(__dirname, './img', sourcefile).replace('.edited','')
+
+  // Options
+  const { overwrite } = (options || {})
+
+  if (!fs.existsSync(target) || overwrite) {
+    // Make sure target dir exists
+    fs.ensureDirSync(dirname(target))
+    fs.copyFileSync(source, target)
+  }
+
+  return {
+    source, target
+  }
+}
+
 export function processVideo(sourcefile, options) {
   const source = join(__dirname, './sources/img', sourcefile)
        ,target = join(__dirname, './img', sourcefile).replace('.edited','')

@@ -1,6 +1,6 @@
 import marked from 'marked'
 import { machineDate, localeDate } from './util/datefmt.js'
-import { processImage, processGif, processPanorama, processVideo } from './processing.js'
+import { processImage, processGif, processPng, processPanorama, processVideo } from './processing.js'
 
 // Debugging
 import { DEBUG } from './util/debug.js'
@@ -38,10 +38,11 @@ export default function(md, options, props) {
     let [ href, title, text, kind ] = args;
   
     // If image is pointing to "sources" directory, pre-process it
-    const m = href.match(/^\/sources\/img\/(|[\w\/]+?\/)(|PANO@)([\w\.-]+?)\.(jpg|gif|gifv|mp4)$/i)
+    const m = href.match(/^\.?\/sources\/img\/(?<path>[\w\/]+?\/|)(?<prefix>PANO@|)(?<name>[\w._-]+?)\.(?<ext>jpg|png|gif|gifv|mp4)$/i)
     if (m) {
-      const [ , path, prefix, name, extension ] = m,
-        filename = path + prefix + name + '.' + extension
+      const { path, prefix, name, ext } = m.groups,
+        filename = path + prefix + name + '.' + ext,
+        extension = ext.toLowerCase()
 
       if (prefix === 'PANO@') {
         DEBUG(`Preprocessing as panorama image: ${filename}`)
@@ -73,6 +74,14 @@ export default function(md, options, props) {
           }
         }
 
+      // PNG-s are not resized, but may be optimized
+      } else if (extension == 'png') {
+        DEBUG(`Preprocessing PNG: ${filename}`)
+
+        const { target } = processPng(filename)
+
+        href = imgur(target)
+
       // Preprocess GIFs, convert to looped/muted autoplay video embeds
       } else if (extension == 'gif' || extension == 'gifv') {
         DEBUG(`Preprocessing as GIF: ${filename}`)
@@ -90,6 +99,8 @@ export default function(md, options, props) {
           }
 
           return `<video autoplay muted loop><source src="${result}" type="video/mp4">${fallback}</video>`
+        } else {
+          console.log('WARNING: Unprocessed file type: ', extension, ' in ', href)
         }
 
       // Copy over videos & return embed code
@@ -114,6 +125,8 @@ export default function(md, options, props) {
 `
 
       }
+    } else {
+      DEBUG('Not processed: ', href)
     }
 
     return rImage.apply(renderer, [href,title,text])
