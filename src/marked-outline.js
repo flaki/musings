@@ -1,4 +1,7 @@
 import marked from 'marked'
+
+import highlight from './highlighter.js'
+
 import { machineDate, localeDate } from './util/datefmt.js'
 import { processImage, processGif, processPng, processPanorama, processVideo } from './processing.js'
 
@@ -7,7 +10,7 @@ import { DEBUG } from './util/debug.js'
 
 
 
-export default function(md, options, props) {
+export default function(md, options = {}, props) {
   const renderer = new marked.Renderer()
   const rHeading = renderer.heading
   const rText = renderer.text
@@ -207,7 +210,19 @@ export default function(md, options, props) {
 
   marked.use({ walkTokens })
   marked.use({ extensions: [ standaloneImage, imageGallery ] })
-  let html = marked(md, Object.assign({}, options, { renderer: renderer }))
+  let html = marked(md, {
+    renderer: renderer,
+    highlight,
+
+    // External overrides
+    ...options
+  })
+
+  // Marked.js workaround for setting the highlight language on the <pre>, not the <code> block
+  html = html.replace(
+    /<pre(><code)( class="[^"]+")/g,
+    '<pre$2$1'
+  )
 
   // TODO: move these hacks out into the lexer/tokenizer step
   // This portion tries to reprocess free-standing full-width images with a larger
@@ -223,6 +238,7 @@ export default function(md, options, props) {
   //)
 
   // Save panorama class on container <p> instead of image
+  // TODO: this is obsolete
   html = html.replace(
     /<p(><img)( class="panorama")/g,
     (...args) => `<p${args[2]}${args[1]}`

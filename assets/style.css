@@ -90,8 +90,9 @@ main, article {
 }
 
 article {
+  width: 100%;
   max-width: 40rem;
-  overflow-x: hidden;
+  overflow-x: visible;
   margin: auto;
 }
 
@@ -189,10 +190,15 @@ article figure>figcaption {
 /* Block quotes inside the main article content */
 article blockquote {
   padding: 1em;
-  margin-left: .5rem;
+  margin-left: 0;
+  margin-right: 0;
   background: #eee;
   border-left: .5rem solid #ddd;
+  font-style: italic;
 }
+
+article blockquote > :first-child { margin-top: 0; }
+article blockquote > :last-child { margin-bottom: 0; }
 
 /* Conversation blurbs */
 article blockquote > ul {
@@ -209,9 +215,6 @@ article blockquote > ul {
 
 /* Better mobile experience */
 @media screen and (max-width: 480px) {
-  :root {
-    font-size: calc(.5rem + 3vw);
-  }
 }
 
 body {
