@@ -1,14 +1,27 @@
+/**
+ * Customized Prism.js theme. Originally based on:
+ *
+ * Nord Theme Originally by Arctic Ice Studio
+ * https://nordtheme.com
+ *
+ * Ported for PrismJS by Zane Hitchcoxc (@zwhitchcox) and Gabriel Ramos (@gabrieluizramos) 
+ */
+ 
 pre, code {
   font-family: 'Iosevka Fixed Slab', monospace;
 }
 
-/**
- * Nord Theme Originally by Arctic Ice Studio
- * https://nordtheme.com
- *
- * Ported for PrismJS by Zane Hitchcoxc (@zwhitchcox) and Gabriel Ramos (@gabrieluizramos)
- * Modified by Flaki
- */
+pre {
+	background: #f8f8f2;
+	padding: 1rem;
+	margin: .5rem 0;
+	overflow: auto;
+  scrollbar-width: auto;
+  border-left: .5rem solid #1E222A;
+	scrollbar-color: #81A1C1 #f8f8f2;
+	white-space: pre-wrap;
+	line-height: 1.5;
+}
 
 code[class*="language-"],
 pre[class*="language-"] {
@@ -29,30 +42,12 @@ pre[class*="language-"] {
 	hyphens: none;
 }
 
-
-/* Element | http://0.0.0.0:8000/peertube-install-on-truenas/ */
-
-
 /* Code blocks */
-pre {
-	background: #f8f8f2;
-	padding: 1rem;
-	margin: .5rem 0;
-	overflow: auto;
-  scrollbar-width: auto;
-  border-left: .5rem solid #1E222A;
-	scrollbar-color: #81A1C1 #f8f8f2;
-}
 pre[class*="language-"] {
   border-left: .5rem solid #1E222A;
 	scrollbar-color: #81A1C1 #1E222A;
 
   display: inline-block;
-	/*
-  min-width: min(100%, 30rem);
-	width: calc(100% + (100vw - 100%) / 4);
-	max-width: calc(40rem - 2rem + (100vw - 40rem) / 2);
-	*/
 	position: relative;
 	z-index: 1;
 
