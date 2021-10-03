@@ -227,3 +227,40 @@ body {
 main, article {
   flex: 1;
 }
+
+
+/* Fancy pull quotes */
+article blockquote.q {
+  position: relative;
+  padding: 2rem 2.5rem;
+  font-style: italic;
+  font-family: 'Vollkorn', serif;
+  line-height: 1.5;
+  font-size: 1.2em;
+}
+article blockquote.q code {
+  font-size: .85em;
+  background-color: transparent;
+  border: none;
+  padding: 0 .3em;
+  letter-spacing: 0;
+}
+blockquote.q::before, blockquote.q::after {
+  display: block;
+  font-family: 'Abril Fatface';
+  font-size: 3rem;
+  position: absolute;
+}
+blockquote.q::before {
+  content: '“';
+  top: 0;
+  left: 0.2ch;
+}
+blockquote.q::after {
+  text-align: right;
+  content: '”';
+  top:auto;
+  left: auto;
+  right: .75ch;
+  bottom: -.5ex;
+}

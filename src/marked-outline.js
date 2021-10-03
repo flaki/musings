@@ -237,6 +237,12 @@ export default function(md, options = {}, props) {
   //  }
   //)
 
+  // TODO: custom blockquotes for pull quotes
+  html = html.replace(
+    /<blockquote>\s*<p><em>&quot;(.*?)&quot;<\/em><\/p>\s*<\/blockquote>/g,
+    '<blockquote class="q"><p>$1</p></blockquote>'
+  )
+
   // Save panorama class on container <p> instead of image
   // TODO: this is obsolete
   html = html.replace(
