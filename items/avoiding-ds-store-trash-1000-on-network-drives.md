@@ -17,7 +17,7 @@ After a short investigation, I learned about an Apple Support article that can h
 
 As it turns out, the support entry is helpfully named ["Adjust SMB browsing behavior in macOS"](https://support.apple.com/en-us/HT208209). In fact, Apple frames this as a simple performance-optimization:
 
-> *"To speed up SMB file browsing, you can prevent macOS from reading .DS_Store files on SMB shares. This makes the Finder use only basic information to immediately display each folder's contents in alphanumeric order. Use this Terminal command:"*
+> *"To speed up SMB file browsing, you can prevent macOS from reading `.DS_Store` files on SMB shares. This makes the Finder use only basic information to immediately display each folder's contents in alphanumeric order."*
 
 You invoke the magical incantation through the terminal:
 
@@ -33,7 +33,7 @@ I felt there was ought to be some sort of mount option that can disable this fea
 
 A cursory search lead me to a [decade-old AskUbuntu question -- unanswered](https://askubuntu.com/questions/248944/how-to-disable-trash-for-remote-filesystems-in-nautilus). I know, classic. The question matched perfectly for what I was looking for, and as I learned, the reason it remained unanswered for so long is that the relevant flag only landed recently, last summer:
 
-> Since GLib 2.66, the `x-gvfs-notrash` unix mount option can be used to disable `g_file_trash()` support for certain mounts, the `%G_IO_ERROR_NOT_SUPPORTED` error will be returned in that case.
+> *"Since GLib 2.66, the `x-gvfs-notrash` unix mount option can be used to disable `g_file_trash()` support for certain mounts, the `%G_IO_ERROR_NOT_SUPPORTED` error will be returned in that case."*
 
 The above comes straight from the documentation of the relevant function call, [`Gio.File.trash`](https://docs.gtk.org/gio/method.File.trash.html), used to move a file into trash rather than deleting it. Armed with this information, it wasn't hard to track down [the merged issue](https://gitlab.gnome.org/GNOME/gvfs/-/merge_requests/89) for more details. The original contributor, [Ondřej Holý even had a blogpost on the subject](https://ondrej.holych.net/whats-new-in-gvfs-for-gnome-40/).
 
