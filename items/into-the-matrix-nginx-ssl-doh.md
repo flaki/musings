@@ -47,7 +47,7 @@ At the end of the day for our struggles we are rewarded with our own `matrix.to`
 
 Matrix.to was created with the user privacy in mind, so the page valiantly informs us:
 
-> The service preserves user privacy by not sharing any information about the links being followed with the Matrix.to server - the redirection is calculated entirely clientside using JavaScript.
+> *"The service preserves user privacy by not sharing any information about the links being followed with the Matrix.to server - the redirection is calculated entirely clientside using JavaScript."*
 
 This also alludes to the (intentional) simplicity of `matrix.to` — it is entirely static, with no server-side component. The whole site is written in JavaScript... and React. Good-ole, [four-year-old](https://reactjs.org/blog/2016/04/07/react-v15.html) React, to be precise...
 

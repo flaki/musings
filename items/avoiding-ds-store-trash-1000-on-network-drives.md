@@ -31,11 +31,11 @@ With that out of the way, the only annoyance that remained are `.Trash-1000` fol
 
 I felt there was ought to be some sort of mount option that can disable this feature on network mounts, and since this is a Gnome thing, I knew I should be looking around [gvfs](http://manpages.ubuntu.com/manpages/focal/en/man7/gvfs.7.html).
 
-A cursory search lead me to a [decade-old AskUbuntu question -- unanswered](https://askubuntu.com/questions/248944/how-to-disable-trash-for-remote-filesystems-in-nautilus). I know, classic. The question matched perfectly for what I was looking for, and as I learned, the reason it remained unanswered for so long is that the relevant flag only landed recently, last summer:
+A cursory search lead me to a [decade-old AskUbuntu question -- unanswered](https://askubuntu.com/questions/248944/how-to-disable-trash-for-remote-filesystems-in-nautilus). I know, classic. The question matched perfectly what I was looking for, and I also learned the reason it remained unanswered for so long: the feature did not exist up until last summer!
 
 > *"Since GLib 2.66, the `x-gvfs-notrash` unix mount option can be used to disable `g_file_trash()` support for certain mounts, the `%G_IO_ERROR_NOT_SUPPORTED` error will be returned in that case."*
 
-The above comes straight from the documentation of the relevant function call, [`Gio.File.trash`](https://docs.gtk.org/gio/method.File.trash.html), used to move a file into trash rather than deleting it. Armed with this information, it wasn't hard to track down [the merged issue](https://gitlab.gnome.org/GNOME/gvfs/-/merge_requests/89) for more details. The original contributor, [Ondřej Holý even had a blogpost on the subject](https://ondrej.holych.net/whats-new-in-gvfs-for-gnome-40/).
+The above comes straight from the documentation of the relevant function call, [`Gio.File.trash`](https://docs.gtk.org/gio/method.File.trash.html), used to move a file into trash rather than deleting it. Armed with this information, it wasn't hard to track down [the merged issue](https://gitlab.gnome.org/GNOME/gvfs/-/merge_requests/89) for more details. The original contributor [Ondřej Holý even has a short blogpost on the subject](https://ondrej.holych.net/whats-new-in-gvfs-for-gnome-40/).
 
 So I have the same files also shared as an NFS network drive that I mount on Linux via [`fstab`](http://manpages.ubuntu.com/manpages/focal/en/man5/fstab.5.html) automatically on boot. Here's how that looks like in my case:
 
@@ -45,6 +45,6 @@ So I have the same files also shared as an NFS network drive that I mount on Lin
 192.168.0.1:/nfsshare  /mnt/networkdrive  nfs  auto,rw,x-gvfs-notrash  0  0
 ```
 
-Remember, that **this will disable the Trash functionality** for these mounted files. Although the Gnome file manager will display a warning and ask for confirmation when permanently deleting files.
+Remember, **this will disable the Trash functionality** for these mounted files. Although at least the Gnome file manager will display a warning and ask for confirmation when permanently deleting files.
 
-Unfortunately you probably already guessed the issue with these workarounds: they exist *on the client*. This means anytime someone comes along browsing these (writable) shares with a device that doesn't have these tweaks enabled the pesky files are bound to re-appear again.
+You probably already guessed the catch: unfortunately all these workarounds exist *on the client*. This means anytime someone comes along browsing these (writable) shares with a device that doesn't have these tweaks enabled the pesky files are bound to re-appear again.
