@@ -1,4 +1,4 @@
-    social_image: africa.jpg
+    social_image: trash-social.png
 
 ---
 
@@ -48,3 +48,5 @@ So I have the same files also shared as an NFS network drive that I mount on Lin
 Remember, **this will disable the Trash functionality** for these mounted files. Although at least the Gnome file manager will display a warning and ask for confirmation when permanently deleting files.
 
 You probably already guessed the catch: unfortunately all these workarounds exist *on the client*. This means anytime someone comes along browsing these (writable) shares with a device that doesn't have these tweaks enabled the pesky files are bound to re-appear again.
+
+*Social image photo "Curious Racoon", taken by [davoud](https://www.pentaxforums.com/gallery/photo-curios-racoon-44736/)*
