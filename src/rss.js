@@ -38,5 +38,6 @@ function item(i) {
     <description>
       ${E(i.description)}
     </description>
+    <summary type="html"><![CDATA[${i.contents}]]></summary>
   </item>`
 }
