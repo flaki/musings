@@ -25,7 +25,7 @@ So in a nutshell below we will:
 
 The [dependencies guide](https://docs.joinpeertube.org/dependencies) states these prerequisites for Ubuntu:
 
-```
+```sh
 sudo apt update
 sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git python-dev cron wget
 ffmpeg -version # Should be >= 4.1
@@ -36,7 +36,7 @@ g++ -v # Should be >= 5.x
 - `redis` we already have on `redis0`
 
 The rest should be fine:
-```
+```sh
 sudo apt install ffmpeg openssl g++ make
 ```
 
@@ -44,7 +44,7 @@ sudo apt install ffmpeg openssl g++ make
 
 We will also need nodejs (12, in particular) and yarn:
 
-```
+```sh
 curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
 apt-get install -y nodejs
 
@@ -62,7 +62,7 @@ apt-get update && apt-get install yarn
 
 Get the git repo, check out a release and install:
 
-```
+```sh
 mkdir config storage versions
 chmod 750 config/
 
@@ -76,13 +76,13 @@ On an Ubuntu 20.04 fresh install `yarn` will complain about *"Couldn't find the 
 
 This may seem like an easy fix, but apparently [it's more complicated than it looks](https://askubuntu.com/a/1272899). All in all, this should take care of it:
 
-```
+```sh
 sudo apt install python-is-python3
 ```
 
 Now we can install the dependencies:
 
-```
+```sh
 cd ~/versions/peertube-3.1.0/
 
 yarn install --pure-lockfile
@@ -100,14 +100,14 @@ The ffmpeg is uncalled for (it's installed) but postgres and redis-server are de
 
 Note that we are also missing the `dist` folder so we need to rebuild it from scratch (unless you used a prebuilt release as the guide recommended):
 
-```
+```sh
 npm run build
 ```
 
 
 ## Instance configuration:
 
-```
+```sh
 cd ~/
 ln -s versions/peertube-3.1.0 ./peertube-latest
 
@@ -128,7 +128,7 @@ To do this, we have a shared dataset designated for Peertube data, shared with o
 
 The Ubuntu VM has a `webshare` user, member of the `www` group. We use this user to mount the `webshare` NFS share on boot:
 
-```
+```sh
 addgroup --gid 80 www
 sudo adduser --system --disabled-password --uid 8080 webshare --gid 80 --home /var/webshare
 
@@ -145,14 +145,14 @@ This same user and group exists on the NAS, helping us avoid permission issues.
 
 Inside our container we have the `peertube:peertube` user running the show, we will map this to `webshare:www` outside in the VM:
 
-```
+```sh
 echo -en uid "$(id -u webshare) $(lxc exec peertube -- id -u peertube)\ngid $(id -g webshare) $(lxc exec peertube -- id -g peertube)" | lxc config set peertube raw.idmap -
 lxc restart peertube
 ```
 
 Then we create a `peertube` directory in webshare and pass it into the container:
 
-```
+```sh
 sudo -u webshare mkdir -p /var/webshare/data/peertube
 
 # /var/www/peertube/storage was already created earlier
@@ -173,7 +173,7 @@ net.ipv4.tcp_congestion_control = bbr
 
 Load the new configuration:
 
-```
+```sh
 sudo sysctl -p /etc/sysctl.d/30-peertube-tcp.conf
 ```
 
@@ -189,7 +189,7 @@ To configure automatically starting the Peertube server we create a simple `syst
 
 In `/etc/systemd/system/peertube.service`:
 
-```
+```systemd
 [Unit]
 Description=PeerTube daemon
 After=network.target
@@ -229,7 +229,7 @@ WantedBy=multi-user.target
 
 Enable & run:
 
-```
+```sh
 sudo systemctl daemon-reload
 sudo systemctl enable peertube
 sudo systemctl start peertube
@@ -237,7 +237,7 @@ sudo systemctl start peertube
 
 Enabling autostart for the LXC container is significantly less involved:
 
-```
+```sh
 lxc config set peertube boot.autostart true
 ```
 
@@ -250,7 +250,7 @@ Set up Nginx using the provided template config, change the `server_name`, the `
 
 Mount the peertube directory in the webserver for ease of access under `/var/www/peertube`.
 
-If Nginx complain that `aio threads` is unsupported:
+If Nginx complains that `aio threads` is unsupported:
 ```
 nginx: [emerg] "aio threads" is unsupported on this platform in /usr/local/etc/nginx/users/pityu.flaki.hu.conf:218
 ```
@@ -259,7 +259,7 @@ nginx: [emerg] "aio threads" is unsupported on this platform in /usr/local/etc/n
 
 > Note: I'm using the OpenResty build of Nginx because I use the Lua features from that distro.
 
-```
+```sh
 ./configure --with-http_v2_module --with-http_postgres_module --with-ipv6 --with-file-aio --with-threads
 gmake
 gmake install
@@ -267,8 +267,8 @@ gmake install
 
 If [aio is already enabled in the kernel](https://serverfault.com/a/476766) that's all you need and the config check should confirm that you are good to go:
 
-```
-# /usr/local/openresty/nginx/sbin/nginx -t -c /usr/local/etc/nginx/nginx.conf
+```shell-session
+flaki@peertube:~ # /usr/local/openresty/nginx/sbin/nginx -t -c /usr/local/etc/nginx/nginx.conf
 nginx: the configuration file /usr/local/etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /usr/local/etc/nginx/nginx.conf test is successful
 ```
@@ -277,7 +277,7 @@ Restart the server to get the newly mounted folder show up and the rebuilt nginx
 
 You can use curl to confirm the Nginx & SSL setup worked:
 
-```
+```sh
 curl https://pityu.flaki.hu/login --resolve pityu.flaki.hu:443:127.0.0.1
 ```
 
@@ -288,12 +288,12 @@ curl https://pityu.flaki.hu/login --resolve pityu.flaki.hu:443:127.0.0.1
 
 Welcome to the Fediverse!
 
-![https://files.todoist.com/user_upload/v2/2180121231/file.png](/img/peertube-installed.png)
+![Peertube home screen after installation](/img/peertube-installed.png)
 
 
 ---
 
     language: en
-    updated: 2021-07-25
+    updated: 2021-09-25
 
 > Note: initially I started out with a TrueNAS-based setup on my home NAS/homeserver. Since then I have already moved on and transitioned my whole setup to Proxmox containers which fits my usecase much better and makes much better use of the hardware for my needs (I should write a blogpost about it, shouldn't I?). In any case, I decided to publish this earlier draft that I wrote as I was setting Peertube up on the TrueNAS system, it might come handy to some!
