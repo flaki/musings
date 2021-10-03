@@ -1,0 +1,170 @@
+pre, pre code {
+  font-family: 'Iosevka Fixed Slab', monospace;
+}
+
+/**
+ * Nord Theme Originally by Arctic Ice Studio
+ * https://nordtheme.com
+ *
+ * Ported for PrismJS by Zane Hitchcoxc (@zwhitchcox) and Gabriel Ramos (@gabrieluizramos)
+ * Modified by Flaki
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+	-moz-tab-size: 2;
+	-o-tab-size: 2;
+	tab-size: 2;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+
+/* Element | http://0.0.0.0:8000/peertube-install-on-truenas/ */
+
+
+/* Code blocks */
+pre {
+	background: #f8f8f2;
+	padding: 1rem;
+	margin: .5rem 0;
+	overflow: auto;
+  scrollbar-width: auto;
+  border-left: .5rem solid #1E222A;
+	scrollbar-color: #81A1C1 #f8f8f2;
+}
+pre[class*="language-"] {
+  border-left: .5rem solid #1E222A;
+	scrollbar-color: #81A1C1 #1E222A;
+
+  display: inline-block;
+	/*
+  min-width: min(100%, 30rem);
+	width: calc(100% + (100vw - 100%) / 4);
+	max-width: calc(40rem - 2rem + (100vw - 40rem) / 2);
+	*/
+	position: relative;
+	z-index: 1;
+
+  min-width: 30rem;
+  max-width: calc(100% + (100vw - 100%) / 4);  
+}
+@media (max-width: 40rem) {
+  pre,
+  pre[class*="language-"] {
+		min-width: 100vw;
+	  max-width: 100vw;
+		margin: 0 -1rem;
+		border-left: none;
+	}
+}
+
+:not(pre) > code {
+	display: inline-block;
+  background: #f8f8f2;
+	
+	font-size: .92em;
+	letter-spacing: .04em;
+	padding: 0 .4em;
+	border: 1px solid #e0e0e0;
+	border-radius: 3px;
+}
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #2E3440;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #636f88;
+}
+
+.token.punctuation {
+	color: #81A1C1;
+}
+
+.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #81A1C1;
+}
+
+.token.number {
+	color: #B48EAD;
+}
+
+.token.boolean {
+	color: #81A1C1;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #A3BE8C;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #81A1C1;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #88C0D0;
+}
+
+.token.keyword {
+	color: #81A1C1;
+}
+
+.token.regex,
+.token.important {
+	color: #EBCB8B;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
