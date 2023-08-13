@@ -5,6 +5,7 @@ RUN apt update && apt-get -y install \
     git git-lfs \
     libjpeg-turbo-progs \
     exiv2 \
+    ffmpeg \
     imagemagick
 
 # Install node-js dependencies
