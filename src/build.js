@@ -5,6 +5,7 @@ import walk from 'klaw-sync'
 import { render } from './minitemplate.js'
 
 import parse from './postParser.js'
+import { copyImage } from './processing.js'
 
 import * as siteConfig from './site-config.js'
 
@@ -112,12 +113,26 @@ LANGUAGES.forEach(language => {
   const rssItems = []
   postsInLang.items.forEach(p => {
     const { parsed, props } = p.versions[language]
-    const social = props.social_image
 
     const contents = tPost({
       ...p,
       contents: parsed.html
     })
+
+    // Copy social image
+    // TODO: download and cache remote images
+    let socialImage
+    if (props.social_image) {
+      // Full URL (relative URLs currently unsupported)
+      if (props.social_image.includes('/')) {
+        socialImage = props.social_image
+      // Image filename, load from /img/social
+      } else {
+        const social = `/social/${props.social_image}`
+        socialImage = new URL(social, siteConfig.mediaroot)
+        copyImage(social)
+      }
+    }
 
     const page = Object.assign({
       language,
@@ -126,7 +141,7 @@ LANGUAGES.forEach(language => {
       title: [ parsed.title||p.title, siteConfig.sitename ].join(' \u2014 '),
       description: parsed.description || p.description,
 
-      socialImage: social ? (social.includes('/') ? social : new URL('/img/social/'+social, siteConfig.siteroot)) : '',
+      socialImage,
 
       url: p.url,
       fullUrl: new URL(p.url, siteConfig.siteroot),

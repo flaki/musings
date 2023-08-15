@@ -70,6 +70,19 @@ export function processGif(sourcefile, options) {
   }
 }
 
+export function copyImage(imagefile, force) {
+  const source = join(__dirname, './sources/img', imagefile)
+       ,target = join(__dirname, './img', imagefile).replace('.edited','')
+
+  // Make sure target dir exists
+  fs.ensureDirSync(dirname(target))
+
+  if (!fs.existsSync(target) || force) {
+    DEBUG(`[copy] ${source} -> ${target}`)
+    fs.copyFileSync(source, target)
+  }
+}
+
 export function processImage(imagefile, options) {
   const source = join(__dirname, './sources/img', imagefile)
        ,target = join(__dirname, './img', imagefile).replace('.edited','')
@@ -201,7 +214,7 @@ export function processVideo(sourcefile, options) {
 function convertJpegAndOptimize(source, target, options) {
   const { size, quality } = (options || {})
 
-  DEBUG(`  Optimizing converter running:\n  ${source} -> ${target}`)
+  DEBUG(`[optimize] ${source} -> ${target}`)
 
   let commands = [
     `jpegtran -outfile '${target}' '${source}'`,

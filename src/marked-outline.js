@@ -3,7 +3,9 @@ import marked from 'marked'
 import highlight from './highlighter.js'
 
 import { machineDate, localeDate } from './util/datefmt.js'
-import { processImage, processGif, processPng, processPanorama, processVideo } from './processing.js'
+import { processImage, copyImage, processGif, processPng, processPanorama, processVideo } from './processing.js'
+
+import * as siteConfig from './site-config.js'
 
 // Debugging
 import { DEBUG } from './util/debug.js'
@@ -128,6 +130,10 @@ export default function(md, options = {}, props) {
 `
 
       }
+    // If it's a relative image URL, copy it to the media assets
+    } else if (!href.includes('/')) {
+      copyImage(href)
+      href = new URL(href, siteConfig.mediaroot)
     } else {
       DEBUG('Not processed: ', href)
     }
