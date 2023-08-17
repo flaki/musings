@@ -5,6 +5,7 @@ docker build . -t musings
 docker run -it -u 1000:1000 \
     -v "$(pwd)"/data:/blog/data \
     -v "$(pwd)"/data/sources:/blog/data/sources \
+    --env-file .env \
     -e DEBUG=1 \
     musings
 

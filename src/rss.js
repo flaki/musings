@@ -17,7 +17,7 @@ function feed(config, items) {
       <title>${E(config.sitename)}</title>
       <description>${E(config.sitedesc)}</description>
       <link>${E(config.siteroot)}/</link>
-      <atom:link href="${E(config.siteroot)}/feed.xml" rel="self" type="application/rss+xml"/>
+      <atom:link href="${E(new URL('/feed.xml', config.siteroot))}" rel="self" type="application/rss+xml"/>
       <pubDate>${buildDate}</pubDate>
       <lastBuildDate>${buildDate}</lastBuildDate>
       ${items.map(i => item(i)).join('\n')}

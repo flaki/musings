@@ -72,10 +72,10 @@ export default function(md, options = {}, props) {
         if (res) {
           // If standalone image, use smallsize
           if (kind == 'standalone') {
-            href = res.smallsize.substring(res.smallsize.indexOf('/img/'))
+            href = imgur(res.smallsize)
           // Otherwise use the thumbnail size {
           } else {
-            href = res.thumbnail.substring(res.thumbnail.indexOf('/img/'))
+            href = imgur(res.thumbnail)
           }
         }
 
@@ -94,12 +94,12 @@ export default function(md, options = {}, props) {
         const res = processGif(`${filename}`)
 
         if (res) {
-          const result = res.target.substring(res.target.indexOf('/img/'))
+          const result = imgur(res.target)
 
           // TODO: fallback and size
           let fallback = ''
           if (res.fallback) {
-            let fallbackurl = res.fallback.substring(res.fallback.indexOf('/img/'))
+            let fallbackurl = imgur(res.fallback)
             fallback = `<span>Video is not supported, <a href="${fallbackurl}">click here</a> for a fallback GIF for "${text}" (size: ? MB)</span>`
           }
 
@@ -261,5 +261,9 @@ export default function(md, options = {}, props) {
 }
 
 function imgur(url) {
-  return url.substring(url.indexOf('/img/'))
+  const mediaRootPath = `/${siteConfig.MEDIA_DIR}/`
+  const s = url.substring(url.indexOf(mediaRootPath)+mediaRootPath.length)
+  const u = new URL(s, siteConfig.mediaroot)
+
+  return u
 }

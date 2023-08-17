@@ -40,6 +40,10 @@ fs.ensureDirSync(OUT())
 // Symlinks to static assets
 // DEBUG('Copying assets...')
 
+// Copy assets
+fs.ensureDirSync( R('assets') )
+fs.copySync(      R('assets'), OUT('assets') )
+
 // try {
 //   // Copy images and assets
 //   for (const p of ['img', 'assets']) {
@@ -126,7 +130,7 @@ LANGUAGES.forEach(language => {
         socialImage = props.social_image
       // Image filename, load from /img/social
       } else {
-        const social = `/social/${props.social_image}`
+        const social = `social/${props.social_image}`
         socialImage = new URL(social, siteConfig.mediaroot)
         copyImage(social)
       }
