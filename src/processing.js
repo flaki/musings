@@ -1,8 +1,8 @@
 import { execSync } from 'child_process'
 import fs from 'fs-extra'
 import { dirname, join, parse as parsePath, format as formatPath } from 'path'
-import { fileURLToPath } from 'url'
-const __dirname = dirname(dirname(fileURLToPath(import.meta.url)))
+
+import { MEDIADIR, OUTDIR } from './site-config.js'
 
 
 
@@ -11,8 +11,8 @@ import { DEBUG } from './util/debug.js'
 
 
 export function processPanorama(sourcefile, ) {
-  const source = join(__dirname, './sources/img', sourcefile)
-       ,target = join(__dirname, './img', sourcefile.replace('PANO@','')).replace('.edited','')
+  const source = join(MEDIADIR, sourcefile)
+       ,target = join(OUTDIR, './img', sourcefile.replace('PANO@','')).replace('.edited','')
        ,storedpreview = replaceExtension(target, '.pano.jpg')
        ,targetpreview = replaceExtension(target, '.pano.jpg')
 
@@ -44,8 +44,8 @@ export function processPanorama(sourcefile, ) {
 }
 
 export function processGif(sourcefile, options) {
-  const source = join(__dirname, './sources/img', sourcefile)
-       ,target = join(__dirname, './img', gifv(sourcefile)).replace('.edited','')
+  const source = join(MEDIADIR, sourcefile)
+       ,target = join(OUTDIR, './img', gifv(sourcefile)).replace('.edited','')
 
   // Options
   const { overwrite, fallbackgif } = (options || {})
@@ -71,8 +71,8 @@ export function processGif(sourcefile, options) {
 }
 
 export function copyImage(imagefile, force) {
-  const source = join(__dirname, './sources/img', imagefile)
-       ,target = join(__dirname, './img', imagefile).replace('.edited','')
+  const source = join(MEDIADIR, imagefile)
+       ,target = join(OUTDIR, './img', imagefile).replace('.edited','')
 
   // Make sure target dir exists
   fs.ensureDirSync(dirname(target))
@@ -84,8 +84,8 @@ export function copyImage(imagefile, force) {
 }
 
 export function processImage(imagefile, options) {
-  const source = join(__dirname, './sources/img', imagefile)
-       ,target = join(__dirname, './img', imagefile).replace('.edited','')
+  const source = join(MEDIADIR, imagefile)
+       ,target = join(OUTDIR, './img', imagefile).replace('.edited','')
        ,thumbnail = thumb(target)
        ,smallsize = small(target)
 
@@ -153,8 +153,8 @@ export function processImage(imagefile, options) {
 }
 
 export function processPng(sourcefile, options) {
-  const source = join(__dirname, './sources/img', sourcefile)
-       ,target = join(__dirname, './img', sourcefile).replace('.edited','')
+  const source = join(MEDIADIR, sourcefile)
+       ,target = join(OUTDIR, './img', sourcefile).replace('.edited','')
 
   // Options
   const { overwrite } = (options || {})
@@ -171,8 +171,8 @@ export function processPng(sourcefile, options) {
 }
 
 export function processVideo(sourcefile, options) {
-  const source = join(__dirname, './sources/img', sourcefile)
-       ,target = join(__dirname, './img', sourcefile).replace('.edited','')
+  const source = join(MEDIADIR, sourcefile)
+       ,target = join(OUTDIR, './img', sourcefile).replace('.edited','')
        ,poster = replaceExtension(target, '.poster.jpg')
 
   // Options

@@ -24,13 +24,8 @@ import { DEBUG } from './util/debug.js'
 const R = (...components) => path.join(__dirname, '../', ...components)
 
 import { LANGUAGES, DEFAULT_LANGUAGE } from './languages.js'
-
-// Build environment
-const BUILD_ENV = process.env['BUILD_ENV'] ?? 'live'
-
-// Output directory
-const OUTPUT_DIR = process.env['OUTPUT_DIR'] ?? '_site'
-const OUTDIR = OUTPUT_DIR === '_site' || path.isAbsolute(OUTPUT_DIR) === false ? R(OUTPUT_DIR) : OUTPUT_DIR
+import { OUTPUT_DIR, OUTDIR, POSTS_DIR, POSTDIR, BUILD_ENV } from './site-config.js'
+// TODO: this is the second import of site-config.js
 
 const OUT = (...components) => path.join(OUTDIR, ...components)
 
@@ -38,30 +33,32 @@ const OUT = (...components) => path.join(OUTDIR, ...components)
 // Create/clean output directory
 DEBUG('Creating output folder: ', OUTPUT_DIR)
 fs.ensureDirSync(OUT())
-fs.emptyDirSync(OUT())
+//TODO:this also deletes images
+//fs.emptyDirSync(OUT())
 
-
+// TODO: no longer needed, docker will take care of assets and images are handled separately
 // Symlinks to static assets
-DEBUG('Copying assets...')
+// DEBUG('Copying assets...')
 
-try {
-  // Copy images and assets
-  for (const p of ['img', 'assets']) {
-    fs.ensureDirSync( R(p) )
-    fs.copySync(      R(p), OUT(p) )
-  }
-}
-catch(e) {
-  DEBUG('Copy errors: ', e.message)
-}
+// try {
+//   // Copy images and assets
+//   for (const p of ['img', 'assets']) {
+//     fs.ensureDirSync( R(p) )
+//     fs.copySync(      R(p), OUT(p) )
+//   }
+// }
+// catch(e) {
+//   DEBUG('Copy errors: ', e.message)
+// }
 
 
 // Read posts
-DEBUG('Enumerating posts...')
+DEBUG('Enumerating posts in '+POSTDIR)
 
-fs.ensureDirSync( R('items') )
+// TODO: allow reading directly from S3?
+fs.ensureDirSync(POSTDIR)
 
-const posts = walk(R('items'),
+const posts = walk(POSTDIR,
   { filter: p => path.extname(p.path) === '.md' }
 ).map(
   post => Object.assign(
@@ -71,6 +68,7 @@ const posts = walk(R('items'),
       date: new Date(post.stats.mtime),
       filename: path.basename(post.path),
       label: path.basename(post.path, '.md').replace('~',''),
+      // TODO: drafts will be moved to their own folder
       draft: path.basename(post.path).substring(0,1) === '~'
     }
   )

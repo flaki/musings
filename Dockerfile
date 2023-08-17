@@ -14,20 +14,15 @@ COPY --chown=1000 package*.json ./
 RUN npm ci
 
 # Mounted:
-
-# sources
-# img
-# items
-# _site
+# data/(sources|www)
 
 COPY --chown=1000 src ./src/
 COPY --chown=1000 assets ./assets/
 COPY --chown=1000 build.js ./
 
-#RUN node build.js
-
 STOPSIGNAL SIGQUIT
 CMD [ "node", "build.js" ]
+#CMD /bin/sh -c "ls -la /blog/data/sources/"
 
 
 # maybe use nginx:alpine instead?
