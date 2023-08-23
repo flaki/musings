@@ -1,2 +1,2 @@
 #!/bin/sh
-env `cat .env` node sync.js
+env `cat .env` node sync.js sources
