@@ -168,7 +168,8 @@ LANGUAGES.forEach(language => {
       }
     ))
 
-    const fpath = OUT(SITEROOT, p.label)
+    // Use either slug, or if not specified, the filename as the output path
+    const fpath = OUT(SITEROOT, props.slug ?? p.label)
     fs.ensureDirSync(fpath)
     fs.writeFileSync(fpath+'/index.html', html)
 
@@ -202,7 +203,8 @@ function postsFor(language) {
     return Object.assign(
       post,
       {
-        url: '/' + (language == DEFAULT_LANGUAGE ? '' : language+'/') + post.label,
+        // Use 'slug' if specified, otherwise use label derived from filename
+        url: '/' + (language == DEFAULT_LANGUAGE ? '' : language+'/') + (props.slug ?? post.label),
         description: props.description,
         title: post.versions[language].parsed.title,
         language,
