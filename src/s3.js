@@ -72,7 +72,7 @@ export async function verifyLocalData(s3name, etag, size = 0) {
 
 	// Short-circuit if size (optional) is specified: if file sizes differ the files cannot be the same
 	// TODO: is this always true?
-	if (size && size !== localStat.size) return false
+	if (size && size !== localStat.size) return localStat
 
   // Minio etags are MD5 hashes of the file, except for multipart uploads (format: HASH-{number})
 	// https://pkg.go.dev/github.com/minio/minio/internal/etag
@@ -141,14 +141,14 @@ export async function sync(prefix, recursive = true) {
 
 		// Ignore size = 0
 		// TODO: are we sure this is this ok?
-		if (o.size == 0) {
+		if (o.size === 0) {
 			return
 		}
 
 		// Check if already exists locally
-		const localStat = await verifyLocalData(o.name, o.etag, o.size)
+		const matchOrStat = await verifyLocalData(o.name, o.etag, o.size)
 		// It is the same file
-		if (localStat === true) {
+		if (matchOrStat === true) {
 			console.log('✔ '+o.name)
 
 			// Update local match
@@ -159,9 +159,41 @@ export async function sync(prefix, recursive = true) {
 			}
 
 			return
-		}
 
-		console.log('⚠️ Needs syncing: '+o.name, o, localStat)
+		// File exists locally but the contents differ
+		} else if (typeof matchOrStat === 'object') {
+			console.log('⚠️ Needs syncing: '+o.name)
+
+			const lPath = getLocalPath(o.name)
+			const l = localFiles.get(lPath)
+			l.s3name = o.name
+
+			//TODO: actual syncing
+			// Use modify dates to decide which file to sync where
+			// NOTE: this assumes correct datetime & timezone config both on server & client!
+			l.lastModified = matchOrStat.mtime
+
+			if (o.lastModified > l.lastModified) {
+				console.log('↓ Download - file on S3 is newer', o.lastModified, '>', l.lastModified)
+
+				const res = await s3Client.fGetObject(BUCKET, o.name, lPath, {})
+				console.log('✓ Successfully downloaded '+o.name)
+			} else {
+				console.log('↥ Upload - local file is newer', o.lastModified, '<', l.lastModified)
+
+				const res = await s3Client.fPutObject(BUCKET, l.s3name, lPath, {})
+				console.log('✓ Successfully uploaded '+l.s3name, res)
+			}
+
+		// File does not exist locally
+		} else {
+			console.log('⚠️ Needs to be downloaded: '+o.name)
+
+			const lPath = getLocalPath(o.name)
+			const res = await s3Client.fGetObject(BUCKET, o.name, lPath, {})
+			console.log('✓ Successfully downloaded '+o.name)
+			//TODO: deleted files will sync back automatically, they should be moved to the trash for deletion
+		}
 	}
 
 	const processLocal = async function(f) {
