@@ -1,7 +1,7 @@
 import { Client as MinioClient } from 'minio'
 import { createHash } from 'node:crypto'
 import fs from 'node:fs/promises'
-import { join } from 'node:path'
+import { join, relative } from 'node:path'
 
 import { DATA } from './site-config.js'
 
@@ -46,7 +46,15 @@ export function getLocalPath(s3name) {
     return join(DATA, s3name)
 }
 //TODO:
-export function getS3Name(localPath) { return '?' }
+export function getS3Name(localPath) {
+	const rel = relative(DATA, localPath)
+	console.log(rel)
+	// media/*
+	//TODO
+
+	// sources/*
+	return rel
+}
 
 // Checks if the local version of the file is the same that is stored in S3
 export async function verifyLocalData(s3name, etag, size = 0) {
@@ -159,6 +167,11 @@ export async function sync(prefix, recursive = true) {
 	const processLocal = async function(f) {
 		if (f.s3name === null) {
 			console.log('⚠️ Needs to be uploaded: '+f.path)
+
+			f.s3name = f.path
+
+			const res = await s3Client.fPutObject(BUCKET, f.s3name, getLocalPath(f.path), {})
+			console.log('✓ Successfully uploaded '+f.s3name, res)
 		}
 	}
 
