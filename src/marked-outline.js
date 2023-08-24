@@ -43,7 +43,7 @@ export default function(md, options = {}, props) {
     let [ href, title, text, kind ] = args;
   
     // If image is pointing to "sources" directory, pre-process it
-    const m = href.match(/^\.?\/sources\/img\/(?<path>[\w\/]+?\/|)(?<prefix>PANO@|)(?<name>[\w._-]+?)\.(?<ext>jpg|png|gif|gifv|mp4)$/i)
+    const m = href.match(/^\.?\/sources\/img\/(?<path>[\w\/-]+?\/|)(?<prefix>PANO@|)(?<name>[\w._-]+?)\.(?<ext>jpg|png|gif|gifv|mp4)$/i)
     if (m) {
       const { path, prefix, name, ext } = m.groups,
         filename = path + prefix + name + '.' + ext,
@@ -135,7 +135,7 @@ export default function(md, options = {}, props) {
       copyImage(href)
       href = new URL(href, siteConfig.mediaroot)
     } else {
-      DEBUG('Not processed: ', href)
+      DEBUG('Not processed: ', href, m)
     }
 
     return rImage.apply(renderer, [href,title,text])

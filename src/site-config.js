@@ -4,7 +4,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export const sitename = `Flaki's Musings`
 export const sitedesc = `Flaki's musings about the world. You may also call this a "blog".`
-export const siteroot = process.env['SITEROOT'] ?? `https://localhost:8080/`
+export const siteroot = process.env['SITEROOT'] ?? `http://localhost:8080/`
 export const mediaroot = process.env['MEDIAROOT'] ?? `${siteroot}img/`
 
 export const socialImage = new URL('social/musings.jpg', mediaroot).toString()
