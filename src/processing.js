@@ -1,5 +1,6 @@
 import { execSync } from 'child_process'
-import fs from 'fs-extra'
+import fs from 'node:fs'
+console.log(Object.keys(fs))
 import { dirname, join, parse as parsePath, format as formatPath } from 'path'
 
 import { MEDIADIR, OUTDIR } from './site-config.js'
@@ -53,7 +54,7 @@ export function processGif(sourcefile, options) {
   // ffmpeg -i lobatse_rainstorm.gifv -vcodec libvpx -b:v 2M -an -auto-alt-ref 0 -f webm output.gifv
   if (!fs.existsSync(target) || overwrite) {
     // Make sure target dir exists
-    fs.ensureDirSync(dirname(target))
+    fs.mkdirSync(dirname(target), { recursive: true })
 
     try {
       run(`ffmpeg -i ${source} -vcodec libvpx -b:v 2M -an -auto-alt-ref 0 -f webm ${target}`);
@@ -75,7 +76,7 @@ export function copyImage(imagefile, force) {
        ,target = join(OUTDIR, './img', imagefile).replace('.edited','')
 
   // Make sure target dir exists
-  fs.ensureDirSync(dirname(target))
+  fs.mkdirSync(dirname(target), { recursive: true })
 
   if (!fs.existsSync(target) || force) {
     DEBUG(`[copy] ${source} -> ${target}`)
@@ -105,7 +106,7 @@ export function processImage(imagefile, options) {
   // (magick) convert -auto-orient -resize '1920x1920' -quality 75 ./sources/img/africa/hornbills_nest.jpg ./img/africa/hornbills_nest.jpg
   if (!hasTarget || overwrite) {
     // Make sure target dir exists
-    fs.ensureDirSync(dirname(target))
+    fs.mkdirSync(dirname(target), { recursive: true })
 
     try {
       run(`convert -auto-orient -resize '1920x1920' -quality 75 "${source}" "${target}"`)
@@ -161,7 +162,7 @@ export function processPng(sourcefile, options) {
 
   if (!fs.existsSync(target) || overwrite) {
     // Make sure target dir exists
-    fs.ensureDirSync(dirname(target))
+    fs.mkdirSync(dirname(target), { recursive: true })
     fs.copyFileSync(source, target)
   }
 
@@ -181,7 +182,7 @@ export function processVideo(sourcefile, options) {
   // ffmpeg -i lobatse_rainstorm.gifv -vcodec libvpx -b:v 2M -an -auto-alt-ref 0 -f webm output.gifv
   if (!fs.existsSync(poster) || overwrite) {
     // Make sure target dir exists
-    fs.ensureDirSync(dirname(target))
+    fs.mkdirSync(dirname(target), { recursive: true })
 
     // Create poster
     try {

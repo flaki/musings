@@ -1,4 +1,4 @@
-import fs from 'fs-extra'
+import fs from 'node:fs'
 import path from 'path'
 import walk from 'klaw-sync'
 
@@ -32,7 +32,7 @@ const OUT = (...components) => path.join(OUTDIR, ...components)
 
 // Create/clean output directory
 DEBUG('Creating output folder: ', OUTPUT_DIR)
-fs.ensureDirSync(OUT())
+fs.mkdirSync(dirname(OUT()), { recursive: true })
 //TODO:this also deletes images
 //fs.emptyDirSync(OUT())
 
@@ -41,14 +41,14 @@ fs.ensureDirSync(OUT())
 // DEBUG('Copying assets...')
 
 // Copy assets
-fs.ensureDirSync( R('assets') )
-fs.copySync(      R('assets'), OUT('assets') )
+fs.mkdirSync( R('assets'), { recursive: true })
+fs.cpSync(    R('assets'), OUT('assets'), { recursive: true } )
 
 // try {
 //   // Copy images and assets
 //   for (const p of ['img', 'assets']) {
-//     fs.ensureDirSync( R(p) )
-//     fs.copySync(      R(p), OUT(p) )
+//     fs.mkdirSync( R(p), { recursive: true })
+//     fs.copySync(  R(p), OUT(p) )
 //   }
 // }
 // catch(e) {
@@ -60,7 +60,7 @@ fs.copySync(      R('assets'), OUT('assets') )
 DEBUG('Enumerating posts in '+POSTDIR)
 
 // TODO: allow reading directly from S3?
-fs.ensureDirSync(POSTDIR)
+fs.mkdirSync(POSTDIR, { recursive: true })
 
 const posts = walk(POSTDIR,
   { filter: p => path.extname(p.path) === '.md' }
@@ -106,8 +106,8 @@ LANGUAGES.forEach(language => {
   const postsInLang = postsFor(language)
   const SITEROOT = language == DEFAULT_LANGUAGE ? '' : language
 
-  fs.ensureDirSync(OUT(SITEROOT))
-  fs.writeFileSync(OUT(SITEROOT, 'index.html'), postsInLang.htmlList)
+  fs.mkdirSync(     OUT(SITEROOT), { recursive: true })
+  fs.writeFileSync( OUT(SITEROOT, 'index.html'), postsInLang.htmlList)
 
   DEBUG(` - index for "${language}" locale: ${postsInLang.items.length} documents`)
 
@@ -170,7 +170,7 @@ LANGUAGES.forEach(language => {
 
     // Use either slug, or if not specified, the filename as the output path
     const fpath = OUT(SITEROOT, props.slug ?? p.label)
-    fs.ensureDirSync(fpath)
+    fs.mkdirSync(fpath, { recursive: true })
     fs.writeFileSync(fpath+'/index.html', html)
 
     DEBUG(`   * ${p.filename}: ${p.title}`)
