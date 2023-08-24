@@ -13,7 +13,7 @@
 
 	<meta name="twitter:title" content="${global.sitename}" />
 	<meta name="twitter:description" content="Flaki's musings about the world. You could call it a blog." />
-	<meta name="twitter:image:src" content="${new URL('social/musings.jpg', global.mediaroot)}" />
+	<meta name="twitter:image:src" content="${global.socialImage}" />
 
 	<meta property="og:site_name" content="${global.sitename}" />
 	<meta property="og:type" content="website" />
@@ -21,12 +21,12 @@
 
 	<meta property="og:title" content="${global.sitename}" />
 	<meta property="og:description" content="Flaki's musings about the world. You could call it a blog." />
-	<meta property="og:image" content="${new URL('social/musings.jpg', global.mediaroot)}" />
+	<meta property="og:image" content="${global.socialImage}" />
 
 	<link rel="stylesheet" href="/assets/fonts/fonts.css">
 	<link rel="stylesheet" href="/assets/style.css">
 
-	<link rel="alternate" type="application/rss+xml" href="${new URL('/feed.xml', global.siteroot)}" title="${global.sitename}">
+	<link rel="alternate" type="application/rss+xml" href="${global.feedUrl}" title="${global.sitename}">
 
 	<meta name="monetization" content="${global.ilp}">
 </head>

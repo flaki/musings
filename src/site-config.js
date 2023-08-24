@@ -4,12 +4,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export const sitename = `Flaki's Musings`
 export const sitedesc = `Flaki's musings about the world. You may also call this a "blog".`
-export const siteroot = process.env['SITEROOT'] ?? `https://musings.flak.is/`
+export const siteroot = process.env['SITEROOT'] ?? `https://localhost:8080/`
 export const mediaroot = process.env['MEDIAROOT'] ?? `${siteroot}img/`
 
-export const socialImage = `${siteroot}img/social/musings.jpg`
+export const socialImage = new URL('social/musings.jpg', mediaroot).toString()
+export const feedUrl = new URL('/feed.xml', siteroot).toString()
 
 export const ilp = `$ilp.uphold.com/qnnAZhmFE9yi`
+
 
 // Mounted data dir (working directory with sources and build output)
 export const DATA = join(dirname(__dirname), 'data')
