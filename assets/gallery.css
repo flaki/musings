@@ -1,8 +1,6 @@
 /* Gallery View (modal popup) */
 dialog.gallery {
   position: fixed;
-  top: 50%;
-  transform: translate(0, -50%);
 
   background: black;
   padding: 0;
@@ -31,7 +29,7 @@ dialog.gallery .close {
   cursor: pointer;
 
   background: white;
-  border: .16rem solid white;
+  border: .25rem solid black;
   border-radius: 50%;
   width: 3rem;
   height: 3rem;
@@ -45,8 +43,11 @@ dialog.gallery .close {
   overflow: hidden;
 
   position: absolute;
-  right: -1rem;
-  top: -1rem;
+  right: .1rem;
+  top: .1rem;
+}
+dialog.gallery .close:focus-visible {
+  outline: .25rem solid orange
 }
 dialog.gallery.zoomedin .close {
   top: .5rem;
@@ -55,16 +56,16 @@ dialog.gallery.zoomedin .close {
 
 dialog.gallery:not(.zoomedin) img {
 	object-fit: contain;
-	justify-self: flex-start;
-	align-self: center;
+  display: block;
 	width: 100%;
+  height: 100%;
 }
 dialog.gallery label {
   color: white;
 
   position: absolute;
   left: 0;
-  bottom: -.2rem;
+  bottom: 0;
   width: 100%;
   padding: 1rem .4rem .4rem;
   background: linear-gradient(to bottom, transparent, rgba(0,0,0,.6) 1rem, black);

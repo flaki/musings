@@ -202,6 +202,7 @@ export default function(md, options = {}, props) {
     }
   }
 
+  // TODO: currently the image gallery is not keyboard-navigatable
   const imageGallery = {
     name: 'imagegallery',
     level: 'block',
