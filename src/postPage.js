@@ -4,7 +4,7 @@ const LOCAL_DATE_FORMAT = { month: 'long', year: 'numeric', day: 'numeric' }
 
 
 export const tPost = (post) => html`
-<h1 id="${post.label}" class="p-name">${post.title}</h1>
+<h1 id="${post.label}" class="p-name">${{ toString() { return post.title }}}</h1>
 
 <blockquote class="p-description">${post.description}</blockquote>
 
