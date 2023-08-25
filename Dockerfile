@@ -18,11 +18,12 @@ RUN npm ci
 
 COPY --chown=1000 src ./src/
 COPY --chown=1000 assets ./assets/
-COPY --chown=1000 build.js ./
+COPY --chown=1000 *.js ./
+
+RUN chmod +x *.js
 
 STOPSIGNAL SIGQUIT
-CMD [ "node", "build.js" ]
-#CMD /bin/sh -c "ls -la /blog/data/sources/"
+CMD /blog/sync.js sources && /blog/build.js && /blog/sync.js media
 
 
 # maybe use nginx:alpine instead?

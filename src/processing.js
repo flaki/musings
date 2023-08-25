@@ -1,6 +1,6 @@
 import { execSync } from 'child_process'
 import fs from 'node:fs'
-console.log(Object.keys(fs))
+
 import { dirname, join, parse as parsePath, format as formatPath } from 'path'
 
 import { MEDIADIR, OUTDIR } from './site-config.js'

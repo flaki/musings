@@ -1,7 +1,7 @@
 #!/bin/sh
 docker build . -t musings
 
-# note: need to mount `data/sources` separately if it is symlinked
+# Sync sources, generate assets (build) && push media up to S3
 docker run -it -u 1000:1000 \
     -v "$(pwd)"/data:/blog/data \
     -v "$(pwd)"/data/sources:/blog/data/sources \

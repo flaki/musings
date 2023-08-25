@@ -39,18 +39,20 @@ export async function posts(prefix = '', recursive = true) {
 }
 
 export function getLocalPath(s3name) {
+		if (!s3name) return DATA
+
     // media/*
     if (s3name.startsWith('media/')) return join(DATA, 'www/img', s3name.substr(6))
     
     // sources/*
     return join(DATA, s3name)
 }
-//TODO:
+
 export function getS3Name(localPath) {
 	const rel = relative(DATA, localPath)
-	console.log(rel)
+
 	// media/*
-	//TODO
+	if (rel.startsWith('www/img/')) return join('media', rel.substr(8))
 
 	// sources/*
 	return rel
@@ -66,7 +68,7 @@ export async function verifyLocalData(s3name, etag, size = 0) {
   }
   catch(e) {
   	// Local file doesn't exist or is inaccessible
-  	console.error(e)
+  	console.error(e.message)
   	return false
   }
 
@@ -98,9 +100,9 @@ export async function verifyLocalData(s3name, etag, size = 0) {
   return (localHash === etag) ? true : localStat
 }
 
-export async function sync(prefix, recursive = true) {
+export async function sync(prefix = '', recursive = true) {
 	const stream = list(prefix, recursive)
-	console.log('Syncing '+prefix+' ...')
+	console.log(`Syncing ${prefix || 'everything'} ...`)
 
 	// Read local file list
 	const localFiles = new Map()
@@ -109,6 +111,7 @@ export async function sync(prefix, recursive = true) {
   	// { recursive: true } silently ignored/buggy in v18.13
 		///await fs.readdir(localRoot, /*{ recursive: true }*/))
   	const localRoot = getLocalPath(prefix)
+  	console.log(`Sync root: ${localRoot}`)
   	const readSubdirs = (arr) => {
   		const newArr = arr.map(p =>
   			fs.readdir(join(localRoot, p))
@@ -123,11 +126,11 @@ export async function sync(prefix, recursive = true) {
   		return newArr
   	}
   	const r = await readSubdirs([''])
-  	const files = (await Promise.all(r)).flat(Infinity).map(p => join(prefix, p))
+  	const files = (await Promise.all(r)).flat(Infinity).map(p => join(localRoot, p))
   	//DEBUG//console.log('files:', JSON.stringify(files,null,4))
   	
   	for (const file of files) {
-  		localFiles.set(getLocalPath(file), { path: file, s3name: null })
+  		localFiles.set(file, { path: file, s3name: null })
   	}
 	} catch (err) {
 	  console.error(err);
@@ -166,6 +169,7 @@ export async function sync(prefix, recursive = true) {
 
 			const lPath = getLocalPath(o.name)
 			const l = localFiles.get(lPath)
+			if (!l) console.log('o=', o, 'matchOrStat=', matchOrStat, 'lPath=', lPath, localFiles)
 			l.s3name = o.name
 
 			//TODO: actual syncing
@@ -196,14 +200,14 @@ export async function sync(prefix, recursive = true) {
 		}
 	}
 
-	const processLocal = async function(f) {
-		if (f.s3name === null) {
-			console.log('⚠️ Needs to be uploaded: '+f.path)
+	const processLocal = async function(l) {
+		if (l.s3name === null) {
+			console.log('⚠️ Needs to be uploaded: '+l.path)
 
-			f.s3name = f.path
+			l.s3name = getS3Name(l.path)
 
-			const res = await s3Client.fPutObject(BUCKET, f.s3name, getLocalPath(f.path), {})
-			console.log('✓ Successfully uploaded '+f.s3name, res)
+			const res = await s3Client.fPutObject(BUCKET, l.s3name, l.path, {})
+			console.log('✓ Successfully uploaded '+l.s3name, res)
 		}
 	}
 
@@ -237,3 +241,18 @@ function md5(content) {
   hashFunc.update(content)
   return hashFunc.digest('hex')
 }
+
+
+
+// function getPartSize(size) {
+//   let partSize = this.partSize
+//     for (;;) {
+//       // while(true) {...} throws linting error.
+//       // If partSize is big enough to accomodate the object size, then use it.
+//       if (partSize * 10000 > size) {
+//         return partSize
+//       }
+//       // Try part sizes as 64MB, 80MB, 96MB etc.
+//       partSize += 16 * 1024 * 1024
+//     }
+// }

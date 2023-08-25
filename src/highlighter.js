@@ -33,4 +33,4 @@ function highlight (code, lang) {
 
 export default highlight
 
-console.log(Object.keys(Prism.languages))
+DEBUG('Highlighted syntaxes: '+Object.keys(Prism.languages).join(', '))
