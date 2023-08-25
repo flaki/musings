@@ -145,6 +145,7 @@ export async function sync(prefix = '', recursive = true) {
 		// Ignore size = 0
 		// TODO: are we sure this is this ok?
 		if (o.size === 0) {
+			console.log(`${o.name} ignored, zero filesize`)
 			return
 		}
 
